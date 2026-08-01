@@ -81,7 +81,7 @@ function UploadDocument() {
 
       <button
         onClick={uploadFile}
-        className="bg-blue-600 text-white px-5 py-2 rounded-lg"
+        className="bg-blue-600 text-white px-6 py-3 rounded-lg"
       >
         Upload
       </button>

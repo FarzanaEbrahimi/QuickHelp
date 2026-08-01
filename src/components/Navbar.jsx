@@ -1,56 +1,246 @@
-import { Link } from "react-router-dom";
-import { MessageSquareText } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Bell, Settings, ArrowLeft } from "lucide-react";
+
 
 function Navbar() {
+
+  const location = useLocation();
+
+  const isDashboard = location.pathname === "/dashboard";
+
+
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/80 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
 
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-xl font-bold text-white"
-        >
-          <MessageSquareText className="h-7 w-7 text-cyan-400" />
-          QuickHelp AI
-        </Link>
+    <nav className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
 
-        <nav className="hidden gap-8 md:flex text-slate-300">
 
-          <a href="#features" className="hover:text-white transition">
-            Features
-          </a>
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
-          <a href="#how" className="hover:text-white transition">
-            How it Works
-          </a>
 
-          <a href="#contact" className="hover:text-white transition">
-            Contact
-          </a>
+        <div className="h-20 flex items-center justify-between">
 
-        </nav>
 
-        <div className="flex gap-3">
+          {/* Logo */}
 
           <Link
-            to="/chat"
-            className="rounded-xl bg-cyan-500 px-5 py-2 text-white hover:bg-cyan-600 transition"
+            to="/"
+            className="text-2xl font-bold tracking-tight text-blue-600"
           >
-            Try AI
+            QuickHelp AI
           </Link>
 
-          <Link
-            to="/dashboard"
-            className="rounded-xl border border-slate-700 px-5 py-2 text-white hover:bg-slate-800 transition"
-          >
-            Dashboard
-          </Link>
+
+
+
+          {/* Home Navigation */}
+
+          {!isDashboard && (
+
+            <div className="hidden md:flex items-center gap-9">
+
+
+              <a
+                href="#features"
+                className="text-[15px] font-semibold text-slate-700 hover:text-blue-600 transition"
+              >
+                Features
+              </a>
+
+
+
+              <a
+                href="#how-it-works"
+                className="text-[15px] font-semibold text-slate-700 hover:text-blue-600 transition"
+              >
+                How It Works
+              </a>
+
+
+
+              <a
+                href="#about"
+                className="text-[15px] font-semibold text-slate-700 hover:text-blue-600 transition"
+              >
+                About
+              </a>
+
+
+
+              <a
+                href="#contact"
+                className="text-[15px] font-semibold text-slate-700 hover:text-blue-600 transition"
+              >
+                Contact
+              </a>
+
+
+
+            </div>
+
+          )}
+
+
+
+
+
+
+          {/* Right Side */}
+
+          <div className="flex items-center gap-4">
+
+
+            {isDashboard ? (
+
+              <>
+
+
+                <Link
+                  to="/"
+                  className="
+                  flex items-center gap-2
+                  px-4 py-2
+                  rounded-xl
+                  text-sm
+                  font-semibold
+                  text-slate-700
+                  hover:bg-slate-100
+                  transition
+                  "
+                >
+
+                  <ArrowLeft size={18}/>
+
+                  Back to Home
+
+                </Link>
+
+
+
+
+
+                <button
+                  className="
+                  w-10 h-10
+                  rounded-xl
+                  flex items-center justify-center
+                  hover:bg-slate-100
+                  transition
+                  "
+                >
+
+                  <Bell size={20}/>
+
+                </button>
+
+
+
+
+
+                <button
+                  className="
+                  w-10 h-10
+                  rounded-xl
+                  flex items-center justify-center
+                  hover:bg-slate-100
+                  transition
+                  "
+                >
+
+                  <Settings size={20}/>
+
+                </button>
+
+
+
+
+
+
+                <button
+                  className="
+                  w-10 h-10
+                  rounded-full
+                  bg-blue-600
+                  text-white
+                  font-bold
+                  flex items-center justify-center
+                  "
+                >
+
+                  F
+
+                </button>
+
+
+
+              </>
+
+
+            ) : (
+
+              <>
+
+
+                <Link
+                  to="/dashboard"
+                  className="
+                  hidden sm:block
+                  text-sm
+                  font-semibold
+                  text-slate-700
+                  hover:text-blue-600
+                  transition
+                  "
+                >
+
+                  Dashboard
+
+                </Link>
+
+
+
+
+                <Link
+                  to="/dashboard"
+                  className="
+                  px-6 py-3
+                  rounded-xl
+                  bg-blue-600
+                  text-white
+                  text-sm
+                  font-semibold
+                  shadow-lg
+                  shadow-blue-600/20
+                  hover:bg-blue-700
+                  transition
+                  "
+                >
+
+                  Get Started
+
+                </Link>
+
+
+              </>
+
+            )}
+
+
+
+          </div>
+
+
 
         </div>
 
+
       </div>
-    </header>
+
+
+    </nav>
+
   );
+
 }
+
 
 export default Navbar;
