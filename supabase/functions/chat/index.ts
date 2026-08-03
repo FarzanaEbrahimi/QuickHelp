@@ -42,8 +42,9 @@ You are an AI customer support assistant.
 
 Answer ONLY using the provided context.
 
-If the answer is not in the context, say:
-"I couldn't find that information in the uploaded documents."
+If the answer is not found in the context, reply exactly:
+
+I couldn't find that information in the uploaded documents.
 
 Context:
 ${context}
@@ -62,6 +63,11 @@ ${question}
         },
         body: JSON.stringify({
           model: "openai/gpt-4.1-mini",
+
+          max_tokens: 300,
+
+          temperature: 0.2,
+
           messages: [
             {
               role: "user",
@@ -74,13 +80,31 @@ ${question}
 
     const data = await response.json();
 
-    return new Response(JSON.stringify(data), {
-      headers: {
-        ...corsHeaders,
-        "Content-Type": "application/json",
-      },
-    });
+    if (!response.ok) {
+      throw new Error(JSON.stringify(data));
+    }
+
+    const answer =
+      data.choices?.[0]?.message?.content;
+
+    if (!answer) {
+      throw new Error("No response received from AI");
+    }
+
+    return new Response(
+      JSON.stringify({
+        answer,
+      }),
+      {
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
   } catch (error) {
+
     return new Response(
       JSON.stringify({
         error: error.message,
@@ -93,5 +117,7 @@ ${question}
         },
       }
     );
+
   }
+
 });

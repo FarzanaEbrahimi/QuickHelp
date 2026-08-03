@@ -1,26 +1,48 @@
 import { supabase } from "../lib/supabase";
 
+function cleanText(text) {
+  return text
+    .replace(/\u0000/g, "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .replace(/\t/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
-function splitText(text, chunkSize = 800) {
+function splitText(
+  text,
+  chunkSize = 1200,
+  overlap = 200
+) {
   const chunks = [];
 
   let start = 0;
 
   while (start < text.length) {
-    chunks.push(
-      text.slice(start, start + chunkSize)
+
+    const end = Math.min(
+      start + chunkSize,
+      text.length
     );
 
-    start += chunkSize;
+    const chunk = text
+      .slice(start, end)
+      .trim();
+
+    if (chunk.length > 0) {
+      chunks.push(chunk);
+    }
+
+    if (end >= text.length) {
+      break;
+    }
+
+    start += (chunkSize - overlap);
   }
 
   return chunks;
 }
-function cleanText(text) {
-  return text.replace(/\u0000/g, "");
-}
-
-
 
 export async function createEmbeddings(
   documentId,
@@ -31,69 +53,90 @@ export async function createEmbeddings(
 
   const chunks = splitText(cleanedText);
 
+  console.log(
+    "Total chunks:",
+    chunks.length
+  );
 
-  for (let i = 0; i < chunks.length; i++) {
+  for (
+    let i = 0;
+    i < chunks.length;
+    i++
+  ) {
 
     const chunk = chunks[i];
 
+    try {
 
-    // Call Supabase Edge Function
-
-    const { data, error } =
-      await supabase.functions.invoke(
-        "create-embedding",
-        {
-          body: {
-            text: chunk
-          }
-        }
-      );
-
-
-    if (error) {
-      console.log(
-        "Embedding error:",
-        error
-      );
-      continue;
-    }
-
-
-    const embedding = data.embedding;
-
-
-
-    // Save chunk + vector
-
-    const { error: insertError } =
-      await supabase
-        .from("document_chunks")
-        .insert([
+      const { data, error } =
+        await supabase.functions.invoke(
+          "create-embedding",
           {
-            document_id: documentId,
-
-            chunk_index: i,
-
-            content: chunk,
-
-            embedding: embedding
+            body: {
+              text: chunk
+            }
           }
-        ]);
-
-
-
-    if (insertError) {
-
-        console.log(
-            "Database insert error:",
-            JSON.stringify(insertError, null, 2)
         );
 
-        return;
+      if (error) {
+
+        console.error(
+          "Embedding error:",
+          error
+        );
+
+        continue;
+      }
+
+      const embedding =
+        data?.embedding;
+
+      if (!embedding) {
+
+        console.error(
+          "No embedding returned for chunk:",
+          i
+        );
+
+        continue;
+      }
+
+      const { error: insertError } =
+        await supabase
+          .from("document_chunks")
+          .insert([
+            {
+              document_id: documentId,
+              chunk_index: i,
+              content: chunk,
+              embedding
+            }
+          ]);
+
+      if (insertError) {
+
+        console.error(
+          "Database insert error:",
+          insertError
+        );
+
+        continue;
+      }
+
+      console.log(
+        `Chunk ${i} saved successfully`
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Chunk processing failed:",
+        error
+      );
+
     }
 
   }
-
 
   console.log(
     "Embeddings created successfully"

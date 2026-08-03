@@ -1,6 +1,7 @@
 import { supabase } from "../lib/supabase";
 
 
+
 /**
  * Create embedding for user question
  */
@@ -17,6 +18,7 @@ async function createQueryEmbedding(text) {
 
 
   if (error) {
+
     console.error(
       "Embedding error:",
       error
@@ -27,7 +29,9 @@ async function createQueryEmbedding(text) {
 
 
   return data.embedding;
+
 }
+
 
 
 
@@ -39,14 +43,16 @@ async function searchSimilarChunks(
 ) {
 
   const { data, error } = await supabase
-    .schema("public")
     .rpc(
       "search_document_chunks",
       {
-        match_count: 5,
         query_embedding: embedding,
+        match_count: 5,
       }
     );
+    console.log("RPC error:", error);
+    console.log("RPC data:", data);
+    console.log("Embedding length:", embedding.length);
 
 
   if (error) {
@@ -61,18 +67,16 @@ async function searchSimilarChunks(
 
 
   return data;
+
 }
+
 
 
 
 /**
  * Send context + question to AI chat function
  */
-async function askAI(
-  question,
-  context
-) {
-
+async function askAI(question, context) {
 
   const { data, error } =
     await supabase.functions.invoke(
@@ -85,20 +89,23 @@ async function askAI(
       }
     );
 
+  console.log("Chat data:", data);
+  console.log("Chat error:", error);
 
   if (error) {
 
-    console.error(
-      "Chat function error:",
-      error
-    );
+    if (error.context) {
+      const text = await error.context.text();
+      console.log("Function response:", text);
+    }
 
     throw error;
   }
 
-
   return data.answer;
+
 }
+
 
 
 
@@ -122,6 +129,14 @@ export async function sendMessage(
 
 
 
+    console.log(
+      "Question embedding created:",
+      embedding
+    );
+
+
+
+
     // 2. Search database
 
     const chunks =
@@ -131,14 +146,22 @@ export async function sendMessage(
 
 
 
+    console.log(
+      "Matched chunks:",
+      chunks
+    );
+
+
+
     if (
       !chunks ||
       chunks.length === 0
     ) {
 
-      return "متأسفانه اطلاعاتی مرتبط با این سوال در اسناد پیدا نشد.";
+      return "متأسفانه اطلاعات مرتبطی در اسناد پیدا نشد.";
 
     }
+
 
 
 
@@ -153,6 +176,8 @@ export async function sendMessage(
 
 
 
+
+
     // 4. Ask AI
 
     const answer =
@@ -162,11 +187,13 @@ export async function sendMessage(
       );
 
 
+
     return answer;
 
 
 
-  } catch(error){
+  } catch(error) {
+
 
     console.error(
       "Send message failed:",
