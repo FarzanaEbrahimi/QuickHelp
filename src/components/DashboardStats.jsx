@@ -1,46 +1,121 @@
 import {
   FileText,
-  Brain,
-  HardDrive,
-  Sparkles,
+  Database,
+  BrainCircuit,
+  MessageSquareText,
+  TrendingUp,
+  Activity,
+  ArrowUpRight,
 } from "lucide-react";
 
-const stats = [
-  {
-    title: "Documents",
-    value: "12",
-    subtitle: "Uploaded files",
-    icon: FileText,
-    color: "from-blue-500 to-cyan-500",
-  },
-  {
-    title: "Embeddings",
-    value: "2.4K",
-    subtitle: "Vector chunks",
-    icon: Brain,
-    color: "from-violet-500 to-fuchsia-500",
-  },
-  {
-    title: "Storage",
-    value: "74%",
-    subtitle: "Space used",
-    icon: HardDrive,
-    color: "from-emerald-500 to-green-500",
-  },
-  {
-    title: "AI Status",
-    value: "Ready",
-    subtitle: "System online",
-    icon: Sparkles,
-    color: "from-orange-500 to-amber-500",
-  },
-];
+function DashboardStats({
 
-function DashboardStats() {
+  documents = [],
+
+}) {
+
+  const totalDocuments = documents.length;
+
+  const totalChunks =
+    totalDocuments * 24;
+
+  const aiHealth = 100;
+
+  const answeredQuestions =
+    totalDocuments * 18 + 12;
+
+  const stats = [
+
+    {
+      title: "Documents",
+
+      value: totalDocuments,
+
+      subtitle: "Knowledge files",
+
+      icon: FileText,
+
+      color:
+        "from-blue-600 to-cyan-500",
+
+      bg:
+        "bg-blue-50",
+
+      iconBg:
+        "bg-blue-100",
+    },
+
+    {
+      title: "AI Chunks",
+
+      value: totalChunks,
+
+      subtitle: "Indexed embeddings",
+
+      icon: Database,
+
+      color:
+        "from-violet-600 to-indigo-500",
+
+      bg:
+        "bg-violet-50",
+
+      iconBg:
+        "bg-violet-100",
+    },
+
+    {
+      title: "AI Health",
+
+      value: `${aiHealth}%`,
+
+      subtitle: "System status",
+
+      icon: BrainCircuit,
+
+      color:
+        "from-emerald-500 to-green-500",
+
+      bg:
+        "bg-emerald-50",
+
+      iconBg:
+        "bg-emerald-100",
+    },
+
+    {
+      title: "Responses",
+
+      value: answeredQuestions,
+
+      subtitle: "Generated answers",
+
+      icon: MessageSquareText,
+
+      color:
+        "from-orange-500 to-pink-500",
+
+      bg:
+        "bg-orange-50",
+
+      iconBg:
+        "bg-orange-100",
+    },
+
+  ];
+
   return (
-    <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
-      {stats.map((item) => {
+    <section
+      id="overview"
+      className="
+      grid
+      gap-6
+      sm:grid-cols-2
+      2xl:grid-cols-4
+      "
+    >
+          {stats.map((item) => {
 
         const Icon = item.icon;
 
@@ -48,77 +123,259 @@ function DashboardStats() {
 
           <div
             key={item.title}
-            className="
+            className={`
               group
               relative
               overflow-hidden
-              rounded-3xl
+              rounded-[32px]
               border
               border-slate-200
-              bg-white
-              p-6
+              ${item.bg}
+              p-7
               shadow-sm
               transition-all
-              duration-300
+              duration-500
               hover:-translate-y-2
-              hover:shadow-xl
-            "
+              hover:border-blue-100
+              hover:shadow-2xl
+            `}
           >
+
+            {/* Gradient Background */}
 
             <div
               className={`
-                flex
-                h-14
-                w-14
-                items-center
-                justify-center
-                rounded-2xl
-                bg-gradient-to-r
+                absolute
+                -right-12
+                -top-12
+                h-44
+                w-44
+                rounded-full
+                bg-gradient-to-br
                 ${item.color}
-                text-white
-                shadow-lg
+                opacity-10
+                blur-3xl
               `}
-            >
+            />
 
-              <Icon className="h-7 w-7" />
+            {/* Header */}
+
+            <div className="relative flex items-center justify-between">
+
+              <div
+                className={`
+                  flex
+                  h-16
+                  w-16
+                  items-center
+                  justify-center
+                  rounded-3xl
+                  ${item.iconBg}
+                  transition-all
+                  duration-300
+                  group-hover:scale-110
+                `}
+              >
+
+                <Icon className="h-8 w-8 text-slate-800" />
+
+              </div>
+
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  rounded-full
+                  bg-white
+                  px-3
+                  py-2
+                  text-xs
+                  font-bold
+                  text-emerald-600
+                  shadow-sm
+                "
+              >
+
+                <TrendingUp className="h-4 w-4" />
+
+                +12%
+
+              </div>
 
             </div>
 
-            <h3 className="mt-8 text-4xl font-black text-slate-900">
-              {item.value}
-            </h3>
+            {/* Title */}
 
-            <p className="mt-2 text-lg font-semibold text-slate-800">
-              {item.title}
-            </p>
+            <div className="relative mt-8">
 
-            <p className="mt-1 text-sm text-slate-500">
-              {item.subtitle}
-            </p>
+              <p
+                className="
+                  text-sm
+                  font-semibold
+                  uppercase
+                  tracking-[0.25em]
+                  text-slate-500
+                "
+              >
+                {item.title}
+              </p>
+
+              <h2
+                className="
+                  mt-3
+                  text-5xl
+                  font-black
+                  tracking-tight
+                  text-slate-900
+                "
+              >
+                {item.value}
+              </h2>
+
+              <p
+                className="
+                  mt-3
+                  text-base
+                  leading-7
+                  text-slate-500
+                "
+              >
+                {item.subtitle}
+              </p>
+
+            </div>
+                        {/* Progress */}
+
+            <div className="relative mt-8">
+
+              <div className="mb-3 flex items-center justify-between">
+
+                <span className="text-sm font-medium text-slate-500">
+                  Performance
+                </span>
+
+                <span className="font-bold text-slate-900">
+                  100%
+                </span>
+
+              </div>
+
+              <div
+                className="
+                  h-3
+                  overflow-hidden
+                  rounded-full
+                  bg-white
+                  shadow-inner
+                "
+              >
+
+                <div
+                  className={`
+                    h-full
+                    w-full
+                    rounded-full
+                    bg-gradient-to-r
+                    ${item.color}
+                  `}
+                />
+
+              </div>
+
+            </div>
+
+            {/* Footer */}
 
             <div
               className="
-                absolute
-                -right-8
-                -top-8
-                h-32
-                w-32
-                rounded-full
-                bg-slate-100
-                transition
-                duration-500
-                group-hover:scale-125
+                relative
+                mt-8
+                flex
+                items-center
+                justify-between
               "
-            />
+            >
+
+              <div className="flex items-center gap-3">
+
+                <div
+                  className="
+                    flex
+                    h-10
+                    w-10
+                    items-center
+                    justify-center
+                    rounded-2xl
+                    bg-white
+                    shadow-sm
+                  "
+                >
+
+                  <Activity className="h-5 w-5 text-emerald-500" />
+
+                </div>
+
+                <div>
+
+                  <p className="text-sm font-semibold text-slate-800">
+                    Live Status
+                  </p>
+
+                  <p className="text-xs text-slate-500">
+                    Updated just now
+                  </p>
+
+                </div>
+
+              </div>
+
+              <button
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  rounded-2xl
+                  bg-white
+                  px-4
+                  py-3
+                  text-sm
+                  font-bold
+                  text-slate-700
+                  shadow-sm
+                  transition-all
+                  duration-300
+                  hover:bg-slate-900
+                  hover:text-white
+                "
+              >
+
+                Details
+
+                <ArrowUpRight
+                  className="
+                    h-4
+                    w-4
+                    transition-transform
+                    duration-300
+                    group-hover:translate-x-1
+                    group-hover:-translate-y-1
+                  "
+                />
+
+              </button>
+
+            </div>
 
           </div>
 
         );
 
       })}
+          </section>
 
-    </section>
   );
+
 }
 
 export default DashboardStats;
