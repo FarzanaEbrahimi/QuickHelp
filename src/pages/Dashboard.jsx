@@ -17,6 +17,7 @@ import AIProcessingCard from "../components/AIProcessingCard";
 
 import DocumentsTable from "../components/DocumentsTable";
 import AIChatPanel from "../components/AIChatPanel";
+import Footer from "../components/Footer";
 
 function Dashboard() {
 
@@ -754,9 +755,11 @@ function Dashboard() {
 
           </div>
 
+
         </div>
 
       )}
+      <Footer />
 
     </div>
 
