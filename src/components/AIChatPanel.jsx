@@ -26,11 +26,19 @@ function AIChatPanel({
 
   const messagesEndRef = useRef(null);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
-  }, [messages, loading]);
+  const firstRender = useRef(true);
+
+useEffect(() => {
+  if (firstRender.current) {
+    firstRender.current = false;
+    return;
+  }
+
+  messagesEndRef.current?.scrollIntoView({
+    behavior: "smooth",
+    block: "end",
+  });
+}, [messages, loading]);
 
   const handleSend = async () => {
 

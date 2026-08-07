@@ -1,246 +1,316 @@
 import { Link, useLocation } from "react-router-dom";
-import { Bell, Settings, ArrowLeft } from "lucide-react";
-
-
-function Navbar() {
-
+import { Menu, Bell } from "lucide-react";
+function Navbar({
+  onMenuClick
+}) {
   const location = useLocation();
-
-  const isDashboard = location.pathname === "/dashboard";
-
-
+  const isDashboard =
+    location.pathname === "/dashboard";
   return (
-
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
-
-
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-
-
-        <div className="h-20 flex items-center justify-between">
-
-
+    <nav
+      className="
+        sticky
+        top-0
+        z-50
+        border-b
+        border-slate-200
+        bg-white/90
+        backdrop-blur
+      "
+    >
+      <div
+        className="
+          flex
+          h-16
+          items-center
+          justify-between
+          px-5
+          lg:px-8
+        "
+      >
+        {/* Left Side */}
+        <div
+          className="
+            flex
+            items-center
+            gap-4
+          "
+        >
+          {/* Mobile Hamburger */}
+          {isDashboard && (
+            <button
+              type="button"
+              onClick={
+                onMenuClick
+              }
+              className="
+                rounded-xl
+                p-2
+                text-slate-700
+                transition
+                hover:bg-slate-100
+                xl:hidden
+              "
+              aria-label="Open sidebar"
+            >
+              <Menu
+                size={22}
+              />
+            </button>
+          )}
           {/* Logo */}
-
           <Link
             to="/"
-            className="text-2xl font-bold tracking-tight text-blue-600"
+            className="
+              flex
+              items-center
+              gap-2
+            "
           >
-            QuickHelp AI
+            <div
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                rounded-xl
+                bg-blue-600
+                text-lg
+                font-bold
+                text-white
+              "
+            >
+              Q
+            </div>
+            <div>
+              <h1
+                className="
+                  text-lg
+                  font-bold
+                  tracking-tight
+                  text-slate-900
+                "
+              >
+                QuickHelp AI
+              </h1>
+              <p
+                className="
+                  -mt-1
+                  text-xs
+                  text-slate-500
+                "
+              >
+                AI Support Platform
+              </p>
+            </div>
           </Link>
-
-
-
-
-          {/* Home Navigation */}
-
+          {/* Desktop Landing Navigation */}
           {!isDashboard && (
-
-            <div className="hidden md:flex items-center gap-9">
-
-
+            <div
+              className="
+                ml-8
+                hidden
+                items-center
+                gap-8
+                lg:flex
+              "
+            >
               <a
                 href="#features"
-                className="text-[15px] font-semibold text-slate-700 hover:text-blue-600 transition"
+                className="
+                  text-sm
+                  font-medium
+                  text-slate-600
+                  transition
+                  hover:text-blue-600
+                "
               >
                 Features
               </a>
-
-
-
               <a
                 href="#how-it-works"
-                className="text-[15px] font-semibold text-slate-700 hover:text-blue-600 transition"
+                className="
+                  text-sm
+                  font-medium
+                  text-slate-600
+                  transition
+                  hover:text-blue-600
+                "
               >
                 How It Works
               </a>
-
-
-
               <a
                 href="#about"
-                className="text-[15px] font-semibold text-slate-700 hover:text-blue-600 transition"
+                className="
+                  text-sm
+                  font-medium
+                  text-slate-600
+                  transition
+                  hover:text-blue-600
+                "
               >
                 About
               </a>
-
-
-
-              <a
-                href="#contact"
-                className="text-[15px] font-semibold text-slate-700 hover:text-blue-600 transition"
-              >
-                Contact
-              </a>
-
-
-
             </div>
-
           )}
-
-
-
-
-
-
-          {/* Right Side */}
-
-          <div className="flex items-center gap-4">
-
-
-            {isDashboard ? (
-
-              <>
-
-
-                <Link
-                  to="/"
-                  className="
-                  flex items-center gap-2
-                  px-4 py-2
-                  rounded-xl
-                  text-sm
-                  font-semibold
-                  text-slate-700
-                  hover:bg-slate-100
-                  transition
-                  "
-                >
-
-                  <ArrowLeft size={18}/>
-
-                  Back to Home
-
-                </Link>
-
-
-
-
-
-                <button
-                  className="
-                  w-10 h-10
-                  rounded-xl
-                  flex items-center justify-center
-                  hover:bg-slate-100
-                  transition
-                  "
-                >
-
-                  <Bell size={20}/>
-
-                </button>
-
-
-
-
-
-                <button
-                  className="
-                  w-10 h-10
-                  rounded-xl
-                  flex items-center justify-center
-                  hover:bg-slate-100
-                  transition
-                  "
-                >
-
-                  <Settings size={20}/>
-
-                </button>
-
-
-
-
-
-
-                <button
-                  className="
-                  w-10 h-10
-                  rounded-full
-                  bg-blue-600
-                  text-white
-                  font-bold
-                  flex items-center justify-center
-                  "
-                >
-
-                  F
-
-                </button>
-
-
-
-              </>
-
-
-            ) : (
-
-              <>
-
-
-                <Link
-                  to="/dashboard"
-                  className="
-                  hidden sm:block
-                  text-sm
-                  font-semibold
-                  text-slate-700
-                  hover:text-blue-600
-                  transition
-                  "
-                >
-
-                  Dashboard
-
-                </Link>
-
-
-
-
-                <Link
-                  to="/dashboard"
-                  className="
-                  px-6 py-3
-                  rounded-xl
-                  bg-blue-600
-                  text-white
-                  text-sm
-                  font-semibold
-                  shadow-lg
-                  shadow-blue-600/20
-                  hover:bg-blue-700
-                  transition
-                  "
-                >
-
-                  Get Started
-
-                </Link>
-
-
-              </>
-
-            )}
-
-
-
-          </div>
-
-
-
+          {/* Dashboard Home Link */}
+          {isDashboard && (
+            <Link
+              to="/"
+              className="
+                ml-4
+                hidden
+                rounded-xl
+                px-4
+                py-2
+                text-sm
+                font-medium
+                text-slate-600
+                transition
+                hover:bg-slate-100
+                hover:text-blue-600
+                md:block
+              "
+            >
+              ← Home
+            </Link>
+          )}
         </div>
-
-
+        {/* Right Side */}
+        <div
+          className="
+            flex
+            items-center
+            gap-3
+          "
+        >
+          {isDashboard ? (
+            <>
+              {/* Notifications */}
+              <button
+                type="button"
+                className="
+                  relative
+                  rounded-xl
+                  p-2
+                  text-slate-700
+                  transition
+                  hover:bg-slate-100
+                "
+              >
+                <Bell
+                  size={20}
+                />
+                <span
+                  className="
+                    absolute
+                    -right-0.5
+                    -top-0.5
+                    h-2.5
+                    w-2.5
+                    rounded-full
+                    bg-emerald-500
+                  "
+                />
+              </button>
+              {/* User Profile */}
+              <button
+                type="button"
+                className="
+                  flex
+                  items-center
+                  gap-3
+                  rounded-xl
+                  border
+                  border-slate-200
+                  bg-white
+                  px-2
+                  py-1.5
+                  transition
+                  hover:border-blue-200
+                  hover:bg-slate-50
+                "
+              >
+                <div
+                  className="
+                    flex
+                    h-9
+                    w-9
+                    items-center
+                    justify-center
+                    rounded-full
+                    bg-blue-600
+                    font-semibold
+                    text-white
+                  "
+                >
+                  F
+                </div>
+                <div
+                  className="
+                    hidden
+                    text-left
+                    lg:block
+                  "
+                >
+                  <p
+                    className="
+                      text-sm
+                      font-semibold
+                      text-slate-900
+                    "
+                  >
+                    Farzana
+                  </p>
+                  <p
+                    className="
+                      text-xs
+                      text-slate-500
+                    "
+                  >
+                    Workspace Owner
+                  </p>
+                </div>
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/dashboard"
+                className="
+                  hidden
+                  text-sm
+                  font-medium
+                  text-slate-600
+                  transition
+                  hover:text-blue-600
+                  sm:block
+                "
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/dashboard"
+                className="
+                  rounded-xl
+                  bg-blue-600
+                  px-5
+                  py-2.5
+                  text-sm
+                  font-semibold
+                  text-white
+                  transition
+                  hover:bg-blue-700
+                "
+              >
+                Get Started
+              </Link>
+            </>
+          )}
+        </div>
       </div>
-
-
     </nav>
-
   );
-
 }
-
-
 export default Navbar;
