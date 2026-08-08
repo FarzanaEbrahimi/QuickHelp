@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+
 import { supabase } from "../lib/supabase";
 import { extractPdfText } from "../services/pdf";
 import { createEmbeddings } from "../services/embeddings";
@@ -26,6 +27,32 @@ function Dashboard() {
   const documentsRef = useRef(null);
   const processingRef = useRef(null);
   const chatRef = useRef(null);
+  useEffect(() => {
+  if (window.location.hash !== "#chat") {
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+    return;
+  }
+
+  const timer = setTimeout(() => {
+    chatRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
+    window.history.replaceState(
+      null,
+      "",
+      "/dashboard"
+    );
+
+  }, 500);
+
+  return () => clearTimeout(timer);
+
+}, []);
   //--------------------------------------------------
   // Sidebar Controls
   //--------------------------------------------------
@@ -606,15 +633,14 @@ function Dashboard() {
                   Retrieval-Augmented Generation (RAG).
                 </p>
               </div>
-              {/*
+              
               <AIChatPanel
                 sendMessage={sendMessage}
               />
-              */}
             </section>
             {/* ==================================== */}
             {/* Bottom Dashboard Banner */}
-            {/* ==================================== */}
+          
             <section>
               <div
                 className="
