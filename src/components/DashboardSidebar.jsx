@@ -73,7 +73,10 @@ function DashboardSidebar({
 
   return (
     <>
+      {/* ========================================= */}
       {/* Sidebar */}
+      {/* ========================================= */}
+
       <aside
         className={`
           fixed
@@ -103,43 +106,19 @@ function DashboardSidebar({
           }
         `}
       >
+        {/* ========================================= */}
         {/* Mobile Header */}
-        <div className="mb-6 flex items-center justify-between xl:hidden">
-          <div>
-            <h2 className="text-lg font-bold text-slate-900">
-              QuickHelp AI
-            </h2>
+        {/* فقط وقتی Sidebar با Hamburger باز می‌شود */}
+        {/* ========================================= */}
 
-            <p className="text-xs text-slate-500">
-              Business Dashboard
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="
-              rounded-xl
-              p-2
-              text-slate-500
-              transition
-              hover:bg-slate-100
-              hover:text-slate-900
-            "
-            aria-label="Close menu"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        {/* Desktop Brand */}
-        <div className="mb-8 hidden xl:block">
-          <div className="flex items-center gap-3">
+        <div className="mb-7 flex items-center justify-between xl:hidden">
+          <div className="flex min-w-0 items-center gap-3">
             <div
               className="
                 flex
                 h-11
                 w-11
+                shrink-0
                 items-center
                 justify-center
                 rounded-xl
@@ -152,8 +131,8 @@ function DashboardSidebar({
               Q
             </div>
 
-            <div>
-              <h2 className="font-bold text-slate-900">
+            <div className="min-w-0">
+              <h2 className="truncate font-bold text-slate-900">
                 QuickHelp AI
               </h2>
 
@@ -162,9 +141,32 @@ function DashboardSidebar({
               </p>
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="
+              shrink-0
+              rounded-xl
+              p-2
+              text-slate-500
+              transition
+              hover:bg-slate-100
+              hover:text-slate-900
+              focus-visible:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-blue-500
+            "
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
         </div>
 
+        {/* ========================================= */}
         {/* Navigation */}
+        {/* ========================================= */}
+
         <nav className="flex-1 space-y-2 overflow-y-auto">
           {items.map((item) => {
             const Icon = item.icon;
@@ -209,6 +211,9 @@ function DashboardSidebar({
                     transition
                     hover:bg-slate-100
                     hover:text-slate-900
+                    focus-visible:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-blue-500
                   "
                 >
                   <Icon size={18} />
@@ -241,55 +246,10 @@ function DashboardSidebar({
           })}
         </nav>
 
-        {/* Storage Card */}
-        <div
-          className="
-            mt-6
-            rounded-2xl
-            border
-            border-slate-200
-            bg-slate-50
-            p-4
-          "
-        >
-          <p
-            className="
-              text-xs
-              font-semibold
-              uppercase
-              tracking-wide
-              text-slate-400
-            "
-          >
-            Storage
-          </p>
-
-          <div className="mt-3 space-y-2 text-sm text-slate-600">
-            <div className="flex justify-between">
-              <span>Documents</span>
-              <span className="font-medium text-slate-900">
-                1
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span>Chunks</span>
-              <span className="font-medium text-slate-900">
-                24
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span>Status</span>
-
-              <span className="font-medium text-emerald-600">
-                Ready
-              </span>
-            </div>
-          </div>
-        </div>
-
+        {/* ========================================= */}
         {/* User Section */}
+        {/* ========================================= */}
+
         <div className="mt-6 border-t border-slate-200 pt-5">
           <div className="flex items-center gap-3">
             <div
@@ -297,6 +257,7 @@ function DashboardSidebar({
                 flex
                 h-10
                 w-10
+                shrink-0
                 items-center
                 justify-center
                 rounded-full
@@ -308,7 +269,7 @@ function DashboardSidebar({
               F
             </div>
 
-            <div>
+            <div className="min-w-0">
               <p className="font-medium text-slate-900">
                 Farzana
               </p>
@@ -319,7 +280,10 @@ function DashboardSidebar({
             </div>
           </div>
 
+          {/* ========================================= */}
           {/* Sign Out */}
+          {/* ========================================= */}
+
           <button
             type="button"
             onClick={handleSignOut}
@@ -342,6 +306,9 @@ function DashboardSidebar({
               hover:border-red-200
               hover:bg-red-50
               hover:text-red-600
+              focus-visible:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-red-400
             "
           >
             <LogOut size={16} />
@@ -351,7 +318,10 @@ function DashboardSidebar({
         </div>
       </aside>
 
+      {/* ========================================= */}
       {/* Settings Coming Soon Modal */}
+      {/* ========================================= */}
+
       {showComingSoon && (
         <div
           className="
@@ -376,7 +346,9 @@ function DashboardSidebar({
               p-7
               shadow-2xl
             "
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
           >
             <div className="flex items-start justify-between">
               <div
@@ -396,7 +368,9 @@ function DashboardSidebar({
 
               <button
                 type="button"
-                onClick={() => setShowComingSoon(false)}
+                onClick={() =>
+                  setShowComingSoon(false)
+                }
                 className="
                   rounded-xl
                   p-2
@@ -404,6 +378,9 @@ function DashboardSidebar({
                   transition
                   hover:bg-slate-100
                   hover:text-slate-700
+                  focus-visible:outline-none
+                  focus-visible:ring-2
+                  focus-visible:ring-blue-500
                 "
                 aria-label="Close"
               >
@@ -429,7 +406,9 @@ function DashboardSidebar({
 
             <button
               type="button"
-              onClick={() => setShowComingSoon(false)}
+              onClick={() =>
+                setShowComingSoon(false)
+              }
               className="
                 mt-6
                 w-full
@@ -441,6 +420,10 @@ function DashboardSidebar({
                 text-white
                 transition
                 hover:bg-blue-700
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-blue-500
+                focus-visible:ring-offset-2
               "
             >
               Got it
