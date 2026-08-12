@@ -10,6 +10,10 @@ const stats = [
     title: "Support Tickets",
     description: "Questions answered by AI",
     color: "from-blue-500 to-cyan-500",
+    background: "from-blue-50 via-white to-cyan-50",
+    darkBackground: "dark:from-blue-950/50 dark:via-slate-900 dark:to-cyan-950/30",
+    glow: "bg-blue-400/10 dark:bg-blue-500/10",
+    hoverBorder: "hover:border-blue-200 dark:hover:border-blue-900",
   },
   {
     icon: Clock3,
@@ -18,6 +22,10 @@ const stats = [
     title: "Response Time",
     description: "Average AI response",
     color: "from-violet-500 to-purple-500",
+    background: "from-violet-50 via-white to-purple-50",
+    darkBackground: "dark:from-violet-950/50 dark:via-slate-900 dark:to-purple-950/30",
+    glow: "bg-violet-400/10 dark:bg-violet-500/10",
+    hoverBorder: "hover:border-violet-200 dark:hover:border-violet-900",
   },
   {
     icon: Smile,
@@ -25,93 +33,261 @@ const stats = [
     suffix: "%",
     title: "Customer Satisfaction",
     description: "Positive feedback",
-    color: "from-green-500 to-emerald-500",
+    color: "from-emerald-500 to-green-500",
+    background: "from-emerald-50 via-white to-green-50",
+    darkBackground: "dark:from-emerald-950/50 dark:via-slate-900 dark:to-green-950/30",
+    glow: "bg-emerald-400/10 dark:bg-emerald-500/10",
+    hoverBorder: "hover:border-emerald-200 dark:hover:border-emerald-900",
   },
 ];
 
 function Stats() {
-
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.3,
   });
 
   return (
-
     <section
       ref={ref}
-      className="bg-gradient-to-b from-slate-50 to-white py-28"
+      className="
+        bg-gradient-to-b
+        from-slate-50
+        to-white
+        py-20
+        transition-colors
+        duration-300
+        sm:py-24
+        lg:py-28
+        dark:from-slate-950
+        dark:to-slate-900
+      "
     >
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-      <div className="mx-auto max-w-7xl px-6">
+        {/* Header */}
 
-        <div className="text-center">
+        <div className="mx-auto max-w-3xl text-center">
 
-          <span className="rounded-full bg-blue-100 px-5 py-2 text-sm font-semibold text-blue-700">
+          <span
+            className="
+              inline-flex
+              items-center
+              rounded-full
+              bg-blue-100
+              px-5
+              py-2
+              text-xs
+              font-semibold
+              tracking-wide
+              text-blue-700
+              sm:text-sm
+              dark:bg-blue-950/60
+              dark:text-blue-300
+            "
+          >
             RESULTS
           </span>
 
-          <h2 className="mt-6 text-5xl font-extrabold text-slate-900">
+          <h2
+            className="
+              mt-5
+              text-3xl
+              font-extrabold
+              tracking-tight
+              text-slate-900
+              sm:text-4xl
+              lg:text-5xl
+              dark:text-white
+            "
+          >
             QuickHelp in Numbers
           </h2>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+          <p
+            className="
+              mx-auto
+              mt-5
+              max-w-2xl
+              text-base
+              leading-7
+              text-slate-600
+              sm:text-lg
+              sm:leading-8
+              dark:text-slate-300
+            "
+          >
             Helping businesses save time with fast, intelligent customer
             support.
           </p>
 
         </div>
 
-        <div className="mt-20 grid gap-8 md:grid-cols-3">
+        {/* Stats Cards */}
 
+        <div
+          className="
+            mt-14
+            grid
+            gap-6
+            sm:mt-16
+            md:grid-cols-2
+            lg:mt-20
+            lg:grid-cols-3
+          "
+        >
           {stats.map((item) => {
-
             const Icon = item.icon;
 
             return (
-
               <div
                 key={item.title}
-                className="group rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm transition-all duration-500 hover:-translate-y-3 hover:border-blue-200 hover:shadow-2xl"
+                className={`
+                  group
+                  relative
+                  isolate
+                  overflow-hidden
+                  rounded-3xl
+                  border
+                  border-slate-200
+                  bg-gradient-to-br
+                  ${item.background}
+                  ${item.darkBackground}
+                  p-7
+                  text-center
+                  shadow-sm
+                  transition-all
+                  duration-300
+
+                  hover:-translate-y-2
+                  hover:shadow-xl
+
+                  ${item.hoverBorder}
+
+                  dark:border-slate-800
+                `}
               >
 
-                <div className={`mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-r ${item.color}`}>
+                {/* Soft Color Glow */}
 
-                  <Icon className="h-10 w-10 text-white" />
+                <div
+                  className={`
+                    pointer-events-none
+                    absolute
+                    -right-10
+                    -top-10
+                    -z-10
+                    h-32
+                    w-32
+                    rounded-full
+                    blur-3xl
+                    ${item.glow}
+                  `}
+                />
 
+                {/* Icon */}
+
+                <div
+                  className={`
+                    mx-auto
+                    flex
+                    h-18
+                    w-18
+                    h-20
+                    w-20
+                    items-center
+                    justify-center
+                    rounded-3xl
+                    bg-gradient-to-br
+                    ${item.color}
+                    shadow-lg
+                    shadow-slate-900/10
+                    transition-transform
+                    duration-300
+                    group-hover:scale-105
+                  `}
+                >
+                  <Icon className="h-9 w-9 text-white sm:h-10 sm:w-10" />
                 </div>
 
-                <h3 className="mt-8 text-6xl font-extrabold text-slate-900">
+                {/* Number */}
 
+                <h3
+                  className="
+                    mt-7
+                    text-4xl
+                    font-extrabold
+                    tracking-tight
+                    text-slate-900
+                    sm:text-5xl
+                    lg:text-6xl
+                    dark:text-white
+                  "
+                >
                   <Counter
                     end={item.number}
                     start={inView}
                   />
-
                   {item.suffix}
-
                 </h3>
 
-                <h4 className="mt-5 text-2xl font-bold text-slate-900">
+                {/* Title */}
+
+                <h4
+                  className="
+                    mt-4
+                    text-xl
+                    font-bold
+                    text-slate-900
+                    sm:text-2xl
+                    dark:text-white
+                  "
+                >
                   {item.title}
                 </h4>
 
-                <p className="mt-4 leading-7 text-slate-600">
+                {/* Description */}
+
+                <p
+                  className="
+                    mx-auto
+                    mt-3
+                    max-w-xs
+                    text-sm
+                    leading-7
+                    text-slate-600
+                    sm:text-base
+                    dark:text-slate-300
+                  "
+                >
                   {item.description}
                 </p>
 
+                {/* Bottom Accent */}
+
+                <div
+                  className={`
+                    mx-auto
+                    mt-6
+                    h-1
+                    w-10
+                    rounded-full
+                    bg-gradient-to-r
+                    ${item.color}
+                    opacity-70
+                    transition-all
+                    duration-300
+                    group-hover:w-16
+                  `}
+                />
+
               </div>
-
             );
-
           })}
-
         </div>
 
       </div>
-
     </section>
-
   );
 }
 

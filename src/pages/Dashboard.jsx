@@ -1,75 +1,24 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+import {
+  FileText,
+  Bot,
+  ArrowRight,
+  Upload,
+  Clock3,
+  CheckCircle2,
+  Sparkles,
+} from "lucide-react";
 
 import { supabase } from "../lib/supabase";
-import { extractPdfText } from "../services/pdf";
-import { createEmbeddings } from "../services/embeddings";
-import { sendMessage } from "../services/chat";
 
-import Navbar from "../components/Navbar";
-import DashboardSidebar from "../components/DashboardSidebar";
 import DashboardHeader from "../components/DashboardHeader";
 import DashboardStats from "../components/DashboardStats";
-
-import UploadCard from "../components/UploadCard";
-import DocumentsTable from "../components/DocumentsTable";
-import AIChatPanel from "../components/AIChatPanel";
-import Footer from "../components/Footer";
 
 function Dashboard() {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const openSidebar = () => {
-    setIsSidebarOpen(true);
-  };
-
-  const closeSidebar = () => {
-    setIsSidebarOpen(false);
-  };
-
-  const fileInputRef = useRef(null);
-
-  // Dashboard sections
-  const overviewRef = useRef(null);
-  const uploadRef = useRef(null);
-  const documentsRef = useRef(null);
-  const chatRef = useRef(null);
-  // --------------------------------------------------
-// Handle dashboard navigation
-// --------------------------------------------------
-
-useEffect(() => {
-  // Normal Dashboard navigation
-  // /dashboard → top of dashboard
-  if (window.location.hash !== "#chat") {
-    window.scrollTo({
-      top: 0,
-      behavior: "instant",
-    });
-
-    return;
-  }
-
-  // Get Started → /dashboard#chat
-  // Scroll to AI Assistant
-  const timer = setTimeout(() => {
-    chatRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-
-    // Remove #chat after scrolling
-    window.history.replaceState(
-      null,
-      "",
-      "/dashboard"
-    );
-  }, 500);
-
-  return () => clearTimeout(timer);
-}, []);
 
   // --------------------------------------------------
   // Fetch Documents
@@ -99,698 +48,1084 @@ useEffect(() => {
   }, []);
 
   // --------------------------------------------------
-  // Upload File
+  // Recent Documents
   // --------------------------------------------------
 
-  const handleUpload = async (event) => {
-    const file = event.target.files?.[0];
-
-    if (!file) return;
-
-    try {
-      const safeFileName = file.name.replace(
-        /[^\w.\-]/g,
-        "_"
-      );
-
-      const filePath =
-        `${Date.now()}-${safeFileName}`;
-
-      // Upload to Storage
-      const { error: uploadError } =
-        await supabase.storage
-          .from("support-docs")
-          .upload(filePath, file);
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      // Get public URL
-      const {
-        data: publicUrlData,
-      } = supabase.storage
-        .from("support-docs")
-        .getPublicUrl(filePath);
-
-      // Save document information
-      const {
-        data: documentData,
-        error: dbError,
-      } = await supabase
-        .from("support_documents")
-        .insert([
-          {
-            title: file.name,
-            file_name: filePath,
-            content: publicUrlData.publicUrl,
-          },
-        ])
-        .select()
-        .single();
-
-      if (dbError) {
-        throw dbError;
-      }
-
-      // Extract PDF text
-      const text = await extractPdfText(file);
-
-      // Create embeddings
-      await createEmbeddings(
-        documentData.id,
-        text
-      );
-
-      // Refresh documents
-      await fetchDocuments();
-
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  // --------------------------------------------------
-  // Test Chat
-  // --------------------------------------------------
-
-  const testChat = async () => {
-    try {
-      const response = await sendMessage(
-        "What is this document about?"
-      );
-
-      console.log(response);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  // --------------------------------------------------
-  // Sidebar Navigation
-  // --------------------------------------------------
-
-  const scrollToSection = (section) => {
-    const refs = {
-      overview: overviewRef,
-      upload: uploadRef,
-      documents: documentsRef,
-      chat: chatRef,
-    };
-
-    refs[section]?.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
+  const recentDocuments = documents.slice(0, 5);
 
   return (
-        <div className="min-h-screen bg-slate-100">
+    <div
+      className="
+        min-h-screen
+        bg-slate-100
+        text-slate-900
+        transition-colors
+        duration-300
 
-      {/* Navbar */}
-      <Navbar onMenuClick={openSidebar} />
+        dark:bg-[#080f1f]
+        dark:text-slate-100
+      "
+    >
+      {/* ==================================================
+          Dashboard Header
+      ================================================== */}
 
-      <div className="flex">
+      <DashboardHeader
+        userName="Farzana"
+        showSearch={false}
+      />
 
-        {/* Sidebar */}
-        <DashboardSidebar
-          isOpen={isSidebarOpen}
-          onClose={closeSidebar}
-          onNavigate={scrollToSection}
+      {/* ==================================================
+          Main Dashboard
+      ================================================== */}
+
+      <main
+        className="
+          mx-auto
+          max-w-[1700px]
+          space-y-8
+          px-5
+          py-7
+          lg:px-8
+          xl:px-10
+        "
+      >
+        {/* ==================================================
+            Welcome Hero
+        ================================================== */}
+
+        {/* ==================================================
+    Welcome Hero
+================================================== */}
+
+<section
+  className="
+    relative
+    overflow-hidden
+    rounded-[32px]
+    border
+    border-blue-100
+    bg-gradient-to-br
+    from-white
+    via-blue-50
+    to-cyan-50
+    p-7
+    shadow-lg
+    shadow-blue-100/50
+    transition-all
+    duration-300
+
+    dark:border-blue-900/40
+    dark:from-slate-900
+    dark:via-blue-950/60
+    dark:to-slate-900
+    dark:shadow-black/20
+
+    lg:p-10
+  "
+>
+  {/* ==================================================
+      Decorative Background
+  ================================================== */}
+
+  <div
+    className="
+      pointer-events-none
+      absolute
+      -right-24
+      -top-24
+      h-72
+      w-72
+      rounded-full
+      bg-blue-400/10
+      blur-3xl
+
+      dark:bg-blue-500/10
+    "
+  />
+
+  <div
+    className="
+      pointer-events-none
+      absolute
+      -bottom-32
+      left-1/3
+      h-80
+      w-80
+      rounded-full
+      bg-cyan-400/10
+      blur-3xl
+
+      dark:bg-cyan-400/10
+    "
+  />
+
+  <div
+    className="
+      pointer-events-none
+      absolute
+      left-1/2
+      top-1/2
+      h-64
+      w-64
+      -translate-x-1/2
+      -translate-y-1/2
+      rounded-full
+      bg-blue-300/5
+      blur-3xl
+
+      dark:bg-blue-500/5
+    "
+  />
+
+  {/* ==================================================
+      Hero Content
+  ================================================== */}
+
+  <div
+    className="
+      relative
+      flex
+      flex-col
+      gap-8
+      lg:flex-row
+      lg:items-center
+      lg:justify-between
+    "
+  >
+    {/* ==================================================
+        Text
+    ================================================== */}
+
+    <div className="max-w-2xl">
+      {/* Brand Badge */}
+
+      <div
+        className="
+          inline-flex
+          items-center
+          gap-2
+          rounded-full
+          border
+          border-blue-200
+          bg-blue-100/70
+          px-3.5
+          py-1.5
+          text-xs
+          font-bold
+          tracking-wide
+          text-blue-700
+
+          dark:border-blue-800/60
+          dark:bg-blue-500/10
+          dark:text-blue-300
+        "
+      >
+        <span
+          className="
+            h-1.5
+            w-1.5
+            rounded-full
+            bg-blue-500
+            shadow-sm
+            shadow-blue-500/50
+          "
         />
-        {/* <DashboardSidebar
-          onNavigate={scrollToSection}
-        /> */}
 
-        {/* Main Content */}
-        <div className="min-w-0 flex-1">
+        QuickHelp AI
+      </div>
 
-          <DashboardHeader
-            documents={documents}
-            userName="Farzana"
-            workspace="Pro"
-            aiStatus="Online"
+      {/* Heading */}
+
+      <h2
+        className="
+          mt-5
+          text-3xl
+          font-black
+          leading-tight
+          tracking-tight
+          text-slate-900
+
+          dark:text-white
+
+          sm:text-4xl
+          lg:text-5xl
+        "
+      >
+        Your AI workspace
+        <span
+          className="
+            block
+            bg-gradient-to-r
+            from-blue-600
+            via-blue-500
+            to-cyan-500
+            bg-clip-text
+            text-transparent
+
+            dark:from-blue-400
+            dark:via-cyan-400
+            dark:to-cyan-300
+          "
+        >
+          is ready.
+        </span>
+      </h2>
+
+      {/* Description */}
+
+      <p
+        className="
+          mt-4
+          max-w-xl
+          text-sm
+          leading-7
+          text-slate-600
+
+          dark:text-slate-300
+
+          sm:text-base
+        "
+      >
+        Manage your knowledge base, upload business
+        documents, and get intelligent answers from
+        your AI assistant.
+      </p>
+
+      {/* Small Status */}
+
+      <div
+        className="
+          mt-5
+          flex
+          flex-wrap
+          items-center
+          gap-3
+        "
+      >
+        <span
+          className="
+            inline-flex
+            items-center
+            gap-2
+            rounded-full
+            border
+            border-emerald-200
+            bg-emerald-50
+            px-3
+            py-1.5
+            text-xs
+            font-semibold
+            text-emerald-700
+
+            dark:border-emerald-800/50
+            dark:bg-emerald-500/10
+            dark:text-emerald-400
+          "
+        >
+          <span
+            className="
+              h-1.5
+              w-1.5
+              rounded-full
+              bg-emerald-500
+            "
           />
 
-          <main
+          AI Assistant Ready
+        </span>
+
+        <span
+          className="
+            text-xs
+            font-medium
+            text-slate-400
+
+            dark:text-slate-500
+          "
+        >
+          Powered by your knowledge base
+        </span>
+      </div>
+    </div>
+
+    {/* ==================================================
+        Quick Actions
+    ================================================== */}
+
+    <div
+      className="
+        relative
+        flex
+        flex-col
+        gap-3
+        sm:flex-row
+        lg:flex-col
+        lg:min-w-[230px]
+      "
+    >
+      {/* Upload */}
+
+      <Link
+        to="/dashboard/upload"
+        className="
+          inline-flex
+          items-center
+          justify-center
+          gap-2
+          rounded-xl
+          bg-gradient-to-r
+          from-blue-600
+          to-cyan-500
+          px-5
+          py-3.5
+          text-sm
+          font-bold
+          text-white
+          shadow-lg
+          shadow-blue-500/20
+          transition-all
+          duration-200
+
+          hover:-translate-y-0.5
+          hover:shadow-xl
+          hover:shadow-blue-500/25
+
+          dark:from-blue-500
+          dark:to-cyan-500
+        "
+      >
+        <Upload size={17} />
+
+        Upload Document
+      </Link>
+
+      {/* Assistant */}
+
+      <Link
+        to="/assistant"
+        className="
+          inline-flex
+          items-center
+          justify-center
+          gap-2
+          rounded-xl
+          border
+          border-slate-200
+          bg-white/80
+          px-5
+          py-3.5
+          text-sm
+          font-bold
+          text-slate-700
+          shadow-sm
+          backdrop-blur
+          transition-all
+          duration-200
+
+          hover:-translate-y-0.5
+          hover:border-blue-200
+          hover:bg-blue-50
+          hover:text-blue-700
+          hover:shadow-md
+
+          dark:border-slate-700
+          dark:bg-slate-800/80
+          dark:text-slate-200
+          dark:hover:border-blue-700
+          dark:hover:bg-slate-800
+          dark:hover:text-blue-400
+        "
+      >
+        <Bot size={17} />
+
+        Open AI Assistant
+
+        <ArrowRight
+          size={15}
+          className="transition-transform duration-200 group-hover:translate-x-0.5"
+        />
+      </Link>
+    </div>
+  </div>
+</section>
+
+        {/* ==================================================
+            Dashboard Statistics
+        ================================================== */}
+
+        <DashboardStats documents={documents} />
+
+        {/* ==================================================
+            Recent Documents
+        ================================================== */}
+
+        <section
+          className="
+            overflow-hidden
+            rounded-[28px]
+            border
+            border-blue-100
+            bg-white
+            shadow-lg
+            shadow-slate-200/60
+            transition-all
+            duration-300
+
+            dark:border-slate-800
+            dark:bg-slate-900
+            dark:shadow-black/20
+          "
+        >
+          {/* ==================================================
+              Recent Documents Header
+          ================================================== */}
+
+          <div
             className="
-              space-y-8
-              px-5
+              relative
+              overflow-hidden
+              border-b
+              border-blue-100
+              bg-gradient-to-r
+              from-blue-50
+              via-white
+              to-cyan-50
+              px-6
               py-6
-              lg:px-8
-              xl:px-10
+
+              dark:border-slate-800
+              dark:from-slate-900
+              dark:via-slate-900
+              dark:to-slate-800
+
+              sm:px-7
             "
           >
-
-            {/* ==================================== */}
-            {/* Dashboard Overview */}
-            {/* ==================================== */}
-
-            <section
-              ref={overviewRef}
-              id="overview"
-              className="
-                overflow-hidden
-                rounded-[36px]
-                bg-gradient-to-br
-                from-slate-900
-                via-blue-900
-                to-cyan-700
-                p-8
-                text-white
-                shadow-2xl
-                lg:p-10
-              "
-            >
-
-              <div
-                className="
-                  flex
-                  flex-col
-                  gap-8
-                  lg:flex-row
-                  lg:items-center
-                  lg:justify-between
-                "
-              >
-
-                <div className="max-w-3xl">
-
-                  <p
-                    className="
-                      text-sm
-                      uppercase
-                      tracking-[0.35em]
-                      text-cyan-200
-                    "
-                  >
-                    QUICKHELP AI
-                  </p>
-
-                  <h1
-                    className="
-                      mt-4
-                      text-4xl
-                      font-black
-                      leading-tight
-                      lg:text-5xl
-                    "
-                  >
-                    AI Customer Support
-                    <br />
-                    Dashboard
-                  </h1>
-
-                  <p
-                    className="
-                      mt-6
-                      max-w-2xl
-                      text-lg
-                      leading-8
-                      text-slate-200
-                    "
-                  >
-                    Manage your documents and get
-                    answers from your AI assistant
-                    in one place.
-                  </p>
-
-                </div>
-
-                <div
-                  className="
-                    grid
-                    grid-cols-2
-                    gap-5
-                    lg:w-[360px]
-                  "
-                >
-
-                  <div
-                    className="
-                      rounded-3xl
-                      bg-white/10
-                      p-6
-                      backdrop-blur
-                    "
-                  >
-                    <p className="text-sm text-cyan-100">
-                      Documents
-                    </p>
-
-                    <h2
-                      className="
-                        mt-3
-                        text-4xl
-                        font-black
-                      "
-                    >
-                      {documents.length}
-                    </h2>
-                  </div>
-
-                  <div
-                    className="
-                      rounded-3xl
-                      bg-white/10
-                      p-6
-                      backdrop-blur
-                    "
-                  >
-                    <p className="text-sm text-cyan-100">
-                      AI Status
-                    </p>
-
-                    <h2
-                      className="
-                        mt-3
-                        text-4xl
-                        font-black
-                      "
-                    >
-                      Ready
-                    </h2>
-                  </div>
-
-                  <div
-                    className="
-                      rounded-3xl
-                      bg-white/10
-                      p-6
-                      backdrop-blur
-                    "
-                  >
-                    <p className="text-sm text-cyan-100">
-                      Documents
-                    </p>
-
-                    <h2
-                      className="
-                        mt-3
-                        text-4xl
-                        font-black
-                      "
-                    >
-                      {documents.length}
-                    </h2>
-                  </div>
-
-                  <div
-                    className="
-                      rounded-3xl
-                      bg-white/10
-                      p-6
-                      backdrop-blur
-                    "
-                  >
-                    <p className="text-sm text-cyan-100">
-                      Workspace
-                    </p>
-
-                    <h2
-                      className="
-                        mt-3
-                        text-4xl
-                        font-black
-                      "
-                    >
-                      Pro
-                    </h2>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </section>
-
-            {/* ==================================== */}
-            {/* Dashboard Statistics */}
-            {/* ==================================== */}
-
-            <DashboardStats
-              documents={documents}
-            />
-
-            {/* ==================================== */}
-            {/* Upload + Documents */}
-            {/* ==================================== */}
+            {/* Header Glow */}
 
             <div
               className="
-                grid
-                gap-8
-                xl:grid-cols-2
+                pointer-events-none
+                absolute
+                -right-16
+                -top-20
+                h-40
+                w-40
+                rounded-full
+                bg-blue-400/10
+                blur-3xl
+
+                dark:bg-blue-500/10
+              "
+            />
+
+            <div
+              className="
+                relative
+                flex
+                flex-col
+                gap-4
+                sm:flex-row
+                sm:items-center
+                sm:justify-between
               "
             >
-
-              {/* Upload */}
-              <section
-                ref={uploadRef}
-                id="upload"
-                className="scroll-mt-32"
-              >
-
-                <UploadCard
-                  fileInputRef={fileInputRef}
-                  handleUpload={handleUpload}
-                  documents={documents}
-                />
-
-              </section>
-
-              {/* Uploaded Documents */}
-              <section
-                ref={documentsRef}
-                id="documents"
-                className="scroll-mt-32"
-              >
-
-                <div className="space-y-6">
+              <div>
+                <div className="flex items-center gap-3">
+                  <div
+                    className="
+                      flex
+                      h-11
+                      w-11
+                      items-center
+                      justify-center
+                      rounded-2xl
+                      bg-gradient-to-br
+                      from-blue-500
+                      to-cyan-500
+                      text-white
+                      shadow-lg
+                      shadow-blue-500/20
+                    "
+                  >
+                    <FileText size={20} />
+                  </div>
 
                   <div>
-
                     <h2
                       className="
-                        text-3xl
+                        text-xl
                         font-black
+                        tracking-tight
                         text-slate-900
+
+                        dark:text-white
+
+                        sm:text-2xl
                       "
                     >
-                      Your Documents
+                      Recent Documents
                     </h2>
 
                     <p
                       className="
-                        mt-2
+                        mt-1
+                        text-sm
                         text-slate-500
+
+                        dark:text-slate-400
                       "
                     >
-                      View and manage the files
-                      you have added to QuickHelp.
+                      Your latest knowledge base files
                     </p>
+                  </div>
+                </div>
+              </div>
 
+              <Link
+                to="/dashboard/documents"
+                className="
+                  inline-flex
+                  w-fit
+                  items-center
+                  gap-2
+                  rounded-xl
+                  border
+                  border-blue-200
+                  bg-white
+                  px-4
+                  py-2.5
+                  text-sm
+                  font-bold
+                  text-blue-600
+                  shadow-sm
+                  transition-all
+                  duration-200
+                  hover:-translate-y-0.5
+                  hover:border-blue-300
+                  hover:bg-blue-50
+
+                  dark:border-slate-700
+                  dark:bg-slate-800
+                  dark:text-blue-400
+                  dark:hover:border-blue-500/50
+                  dark:hover:bg-slate-700
+                "
+              >
+                View all
+
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+
+          {/* ==================================================
+              Loading
+          ================================================== */}
+
+          {loading ? (
+            <div className="px-6 py-14">
+              <div
+                className="
+                  flex
+                  items-center
+                  justify-center
+                  gap-3
+                  text-sm
+                  text-slate-500
+
+                  dark:text-slate-400
+                "
+              >
+                <div
+                  className="
+                    h-5
+                    w-5
+                    animate-spin
+                    rounded-full
+                    border-2
+                    border-slate-200
+                    border-t-blue-600
+
+                    dark:border-slate-700
+                    dark:border-t-blue-400
+                  "
+                />
+
+                Loading documents...
+              </div>
+            </div>
+          ) : recentDocuments.length === 0 ? (
+            /* ==================================================
+                Empty State
+            ================================================== */
+
+            <div className="p-5 sm:p-7">
+              <div
+                className="
+                  relative
+                  overflow-hidden
+                  rounded-[24px]
+                  border
+                  border-blue-100
+                  bg-gradient-to-br
+                  from-blue-50
+                  via-white
+                  to-cyan-50
+                  px-6
+                  py-14
+                  text-center
+
+                  dark:border-slate-800
+                  dark:from-slate-800/70
+                  dark:via-slate-900
+                  dark:to-slate-800
+                "
+              >
+                {/* Decorative Glow */}
+
+                <div
+                  className="
+                    pointer-events-none
+                    absolute
+                    left-1/2
+                    top-0
+                    h-48
+                    w-48
+                    -translate-x-1/2
+                    -translate-y-1/2
+                    rounded-full
+                    bg-blue-400/10
+                    blur-3xl
+
+                    dark:bg-blue-500/10
+                  "
+                />
+
+                <div className="relative flex flex-col items-center">
+                  {/* Large Icon */}
+
+                  <div
+                    className="
+                      flex
+                      h-20
+                      w-20
+                      items-center
+                      justify-center
+                      rounded-[24px]
+                      bg-gradient-to-br
+                      from-blue-500
+                      to-cyan-500
+                      text-white
+                      shadow-xl
+                      shadow-blue-500/20
+                    "
+                  >
+                    <FileText size={34} />
                   </div>
 
-                  <DocumentsTable
-                    documents={documents}
+                  <h3
+                    className="
+                      mt-7
+                      text-2xl
+                      font-black
+                      tracking-tight
+                      text-slate-900
+
+                      dark:text-white
+                    "
+                  >
+                    No documents yet
+                  </h3>
+
+                  <p
+                    className="
+                      mt-3
+                      max-w-md
+                      text-sm
+                      leading-7
+                      text-slate-500
+
+                      dark:text-slate-400
+                    "
+                  >
+                    Upload your first document to start
+                    building your QuickHelp knowledge base.
+                    Your AI assistant will use these files
+                    to answer questions.
+                  </p>
+
+                  <Link
+                    to="/dashboard/upload"
+                    className="
+                      mt-7
+                      inline-flex
+                      items-center
+                      gap-2
+                      rounded-xl
+                      bg-gradient-to-r
+                      from-blue-600
+                      to-cyan-500
+                      px-6
+                      py-3.5
+                      text-sm
+                      font-bold
+                      text-white
+                      shadow-lg
+                      shadow-blue-600/20
+                      transition-all
+                      duration-200
+                      hover:-translate-y-0.5
+                      hover:shadow-xl
+                      hover:shadow-blue-600/25
+                    "
+                  >
+                    <Upload size={18} />
+
+                    Upload Document
+
+                    <ArrowRight size={16} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* ==================================================
+                Documents List
+            ================================================== */
+
+            <div
+              className="
+                divide-y
+                divide-slate-100
+
+                dark:divide-slate-800
+              "
+            >
+              {recentDocuments.map((document) => (
+                <div
+                  key={document.id}
+                  className="
+                    group
+                    flex
+                    flex-col
+                    gap-4
+                    px-6
+                    py-5
+                    transition-all
+                    duration-200
+
+                    hover:bg-blue-50/60
+
+                    dark:hover:bg-slate-800/70
+
+                    sm:flex-row
+                    sm:items-center
+                    sm:justify-between
+                    sm:px-7
+                  "
+                >
+                  {/* Document Info */}
+
+                  <div className="flex min-w-0 items-center gap-4">
+                    <div
+                      className="
+                        flex
+                        h-12
+                        w-12
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-2xl
+                        bg-blue-50
+                        text-blue-600
+                        transition-all
+                        duration-200
+                        group-hover:scale-105
+                        group-hover:bg-blue-100
+
+                        dark:bg-blue-500/10
+                        dark:text-blue-400
+                        dark:group-hover:bg-blue-500/20
+                      "
+                    >
+                      <FileText size={20} />
+                    </div>
+
+                    <div className="min-w-0">
+                      <p
+                        className="
+                          truncate
+                          font-bold
+                          text-slate-900
+
+                          dark:text-white
+                        "
+                        title={
+                          document.title ||
+                          document.file_name
+                        }
+                      >
+                        {document.title ||
+                          document.file_name}
+                      </p>
+
+                      <div
+                        className="
+                          mt-1.5
+                          flex
+                          flex-wrap
+                          items-center
+                          gap-3
+                          text-xs
+                          text-slate-500
+
+                          dark:text-slate-400
+                        "
+                      >
+                        <span className="flex items-center gap-1">
+                          <Clock3 size={13} />
+
+                          {document.created_at
+                            ? new Date(
+                                document.created_at
+                              ).toLocaleDateString()
+                            : "Recently added"}
+                        </span>
+
+                        <span
+                          className="
+                            flex
+                            items-center
+                            gap-1
+                            font-medium
+                            text-emerald-600
+
+                            dark:text-emerald-400
+                          "
+                        >
+                          <CheckCircle2 size={13} />
+
+                          Available
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Status */}
+
+                  <span
+                    className="
+                      inline-flex
+                      w-fit
+                      items-center
+                      gap-1.5
+                      rounded-full
+                      border
+                      border-emerald-200
+                      bg-emerald-50
+                      px-3.5
+                      py-1.5
+                      text-xs
+                      font-bold
+                      text-emerald-700
+
+                      dark:border-emerald-500/20
+                      dark:bg-emerald-500/10
+                      dark:text-emerald-400
+                    "
+                  >
+                    <span
+                      className="
+                        h-1.5
+                        w-1.5
+                        rounded-full
+                        bg-emerald-500
+                      "
+                    />
+
+                    Ready
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* ==================================================
+            AI Assistant CTA
+        ================================================== */}
+
+        <section
+          className="
+            relative
+            overflow-hidden
+            rounded-[28px]
+            border
+            border-emerald-100
+            bg-gradient-to-br
+            from-emerald-50
+            via-white
+            to-cyan-50
+            p-7
+            shadow-lg
+            shadow-emerald-100/40
+            transition-all
+            duration-300
+
+            dark:border-emerald-900/40
+            dark:from-slate-900
+            dark:via-slate-900
+            dark:to-slate-800
+            dark:shadow-black/20
+
+            lg:p-9
+          "
+        >
+          {/* Decorative Glow */}
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              -right-20
+              -top-24
+              h-64
+              w-64
+              rounded-full
+              bg-emerald-400/10
+              blur-3xl
+
+              dark:bg-emerald-500/10
+            "
+          />
+
+          <div
+            className="
+              relative
+              flex
+              flex-col
+              gap-6
+              lg:flex-row
+              lg:items-center
+              lg:justify-between
+            "
+          >
+            <div className="flex items-start gap-4">
+              <div
+                className="
+                  flex
+                  h-13
+                  w-13
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-gradient-to-br
+                  from-emerald-500
+                  to-cyan-500
+                  text-white
+                  shadow-lg
+                  shadow-emerald-500/20
+                "
+              >
+                <Bot size={24} />
+              </div>
+
+              <div>
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-full
+                    bg-emerald-100
+                    px-3
+                    py-1
+                    text-xs
+                    font-bold
+                    text-emerald-700
+
+                    dark:bg-emerald-500/10
+                    dark:text-emerald-400
+                  "
+                >
+                  <span
+                    className="
+                      h-1.5
+                      w-1.5
+                      rounded-full
+                      bg-emerald-500
+                    "
                   />
 
+                  AI Ready
                 </div>
-
-              </section>
-
-            </div>
-
-            {/* ==================================== */}
-            {/* AI Assistant */}
-            {/* ==================================== */}
-
-            <section
-              ref={chatRef}
-              id="chat"
-              className="scroll-mt-32"
-            >
-
-              <div className="mb-6">
 
                 <h2
                   className="
-                    text-3xl
+                    mt-3
+                    text-2xl
                     font-black
+                    tracking-tight
                     text-slate-900
+
+                    dark:text-white
                   "
                 >
-                  AI Assistant
+                  Ask your knowledge base
                 </h2>
 
                 <p
                   className="
                     mt-2
+                    max-w-2xl
+                    leading-7
                     text-slate-500
+
+                    dark:text-slate-400
                   "
                 >
-                  Ask questions about your
-                  uploaded documents and get
-                  clear answers.
+                  Ask questions about your uploaded
+                  documents and get intelligent answers
+                  from your AI assistant.
                 </p>
-
               </div>
-
-              <AIChatPanel
-                sendMessage={sendMessage}
-              />
-
-            </section>
-                        {/* ==================================== */}
-            {/* Bottom Dashboard Banner */}
-            {/* ==================================== */}
-
-            <section>
-
-              <div
-                className="
-                  overflow-hidden
-                  rounded-[36px]
-                  bg-gradient-to-r
-                  from-slate-900
-                  via-slate-800
-                  to-slate-900
-                  p-8
-                  text-white
-                  lg:p-10
-                "
-              >
-
-                <div
-                  className="
-                    flex
-                    flex-col
-                    gap-8
-                    lg:flex-row
-                    lg:items-center
-                    lg:justify-between
-                  "
-                >
-
-                  <div className="max-w-2xl">
-
-                    <p
-                      className="
-                        text-sm
-                        uppercase
-                        tracking-[0.3em]
-                        text-cyan-400
-                      "
-                    >
-                      QUICKHELP AI
-                    </p>
-
-                    <h2
-                      className="
-                        mt-4
-                        text-4xl
-                        font-black
-                      "
-                    >
-                      Your workspace is ready.
-                    </h2>
-
-                    <p
-                      className="
-                        mt-5
-                        leading-8
-                        text-slate-300
-                      "
-                    >
-                      Add your documents and use
-                      the AI assistant to find
-                      answers quickly.
-                    </p>
-
-                  </div>
-
-                  <div
-                    className="
-                      grid
-                      gap-5
-                      sm:grid-cols-3
-                    "
-                  >
-
-                    <div
-                      className="
-                        rounded-3xl
-                        bg-white/10
-                        p-6
-                        backdrop-blur
-                      "
-                    >
-
-                      <h3
-                        className="
-                          text-4xl
-                          font-black
-                        "
-                      >
-                        {documents.length}
-                      </h3>
-
-                      <p
-                        className="
-                          mt-2
-                          text-slate-300
-                        "
-                      >
-                        Documents
-                      </p>
-
-                    </div>
-
-                    <div
-                      className="
-                        rounded-3xl
-                        bg-white/10
-                        p-6
-                        backdrop-blur
-                      "
-                    >
-
-                      <h3
-                        className="
-                          text-4xl
-                          font-black
-                        "
-                      >
-                        Ready
-                      </h3>
-
-                      <p
-                        className="
-                          mt-2
-                          text-slate-300
-                        "
-                      >
-                        AI Assistant
-                      </p>
-
-                    </div>
-
-                    <div
-                      className="
-                        rounded-3xl
-                        bg-white/10
-                        p-6
-                        backdrop-blur
-                      "
-                    >
-
-                      <h3
-                        className="
-                          text-4xl
-                          font-black
-                        "
-                      >
-                        Live
-                      </h3>
-
-                      <p
-                        className="
-                          mt-2
-                          text-slate-300
-                        "
-                      >
-                        Workspace
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </section>
-
-          </main>
-
-        </div>
-
-      </div>
-
-      {/* Loading Overlay */}
-
-      {loading && (
-        <div
-          className="
-            fixed
-            inset-0
-            z-[999]
-            flex
-            items-center
-            justify-center
-            bg-white/70
-            backdrop-blur-sm
-          "
-        >
-
-          <div
-            className="
-              flex
-              flex-col
-              items-center
-              gap-5
-              rounded-[32px]
-              bg-white
-              px-10
-              py-10
-              shadow-2xl
-            "
-          >
-
-            <div
-              className="
-                h-14
-                w-14
-                animate-spin
-                rounded-full
-                border-[5px]
-                border-slate-200
-                border-t-blue-600
-              "
-            />
-
-            <div className="text-center">
-
-              <h3
-                className="
-                  text-xl
-                  font-bold
-                  text-slate-900
-                "
-              >
-                Loading Dashboard
-              </h3>
-
-              <p
-                className="
-                  mt-2
-                  text-slate-500
-                "
-              >
-                Getting your workspace ready...
-              </p>
-
             </div>
 
+            <Link
+              to="/assistant"
+              className="
+                inline-flex
+                items-center
+                justify-center
+                gap-2
+                rounded-xl
+                bg-slate-900
+                px-5
+                py-3
+                text-sm
+                font-bold
+                text-white
+                shadow-lg
+                transition-all
+                duration-200
+                hover:-translate-y-0.5
+                hover:bg-slate-800
+
+                dark:bg-white
+                dark:text-slate-900
+                dark:hover:bg-slate-100
+              "
+            >
+              Open Assistant
+
+              <ArrowRight size={17} />
+            </Link>
           </div>
-
-        </div>
-      )}
-
-      <Footer />
-
+        </section>
+      </main>
     </div>
   );
 }

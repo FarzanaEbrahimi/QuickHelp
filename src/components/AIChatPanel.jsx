@@ -1,3 +1,4 @@
+
 import {
   Bot,
   User,
@@ -68,9 +69,7 @@ function AIChatPanel({ sendMessage }) {
         ...prev,
         {
           role: "ai",
-          text:
-            response ||
-            "No response received.",
+          text: response || "No response received.",
         },
       ]);
     } catch (error) {
@@ -102,9 +101,14 @@ function AIChatPanel({ sendMessage }) {
         border-slate-200
         bg-white
         shadow-sm
+        transition-colors
+        duration-300
+
+        dark:border-slate-800
+        dark:bg-slate-900
+        dark:shadow-black/20
       "
     >
-
       {/* ================================================== */}
       {/* Header */}
       {/* ================================================== */}
@@ -119,15 +123,19 @@ function AIChatPanel({ sendMessage }) {
           bg-white
           px-6
           py-5
+          transition-colors
+          duration-300
+
+          dark:border-slate-800
+          dark:bg-slate-900
+
           sm:flex-row
           sm:items-center
           sm:justify-between
           sm:px-7
         "
       >
-
         <div className="flex items-center gap-4">
-
           <div
             className="
               flex
@@ -148,14 +156,15 @@ function AIChatPanel({ sendMessage }) {
           </div>
 
           <div>
-
             <div className="flex items-center gap-3">
-
               <h2
                 className="
                   text-xl
                   font-black
                   text-slate-900
+                  transition-colors
+                  duration-300
+                  dark:text-white
                 "
               >
                 AI Assistant
@@ -173,6 +182,9 @@ function AIChatPanel({ sendMessage }) {
                   text-xs
                   font-semibold
                   text-emerald-600
+
+                  dark:bg-emerald-500/10
+                  dark:text-emerald-400
                 "
               >
                 <span
@@ -181,11 +193,12 @@ function AIChatPanel({ sendMessage }) {
                     w-1.5
                     rounded-full
                     bg-emerald-500
+                    dark:bg-emerald-400
                   "
                 />
+
                 Online
               </span>
-
             </div>
 
             <p
@@ -193,15 +206,15 @@ function AIChatPanel({ sendMessage }) {
                 mt-1
                 text-sm
                 text-slate-500
+                transition-colors
+                duration-300
+                dark:text-slate-400
               "
             >
               Ask questions about your knowledge base.
             </p>
-
           </div>
-
         </div>
-
       </div>
 
       {/* ================================================== */}
@@ -216,13 +229,16 @@ function AIChatPanel({ sendMessage }) {
           bg-slate-50
           px-5
           py-6
+          transition-colors
+          duration-300
+
+          dark:bg-slate-950
+
           sm:px-7
           sm:py-7
         "
       >
-
         {messages.map((item, index) => (
-
           <div
             key={index}
             className={`
@@ -237,11 +253,9 @@ function AIChatPanel({ sendMessage }) {
               }
             `}
           >
-
             {/* AI Avatar */}
 
             {item.role === "ai" && (
-
               <div
                 className="
                   flex
@@ -260,7 +274,6 @@ function AIChatPanel({ sendMessage }) {
               >
                 <Bot className="h-5 w-5" />
               </div>
-
             )}
 
             {/* Message */}
@@ -274,6 +287,7 @@ function AIChatPanel({ sendMessage }) {
                 px-5
                 py-4
                 leading-7
+
                 ${
                   item.role === "user"
                     ? `
@@ -291,11 +305,15 @@ function AIChatPanel({ sendMessage }) {
                       bg-white
                       text-slate-700
                       shadow-sm
+
+                      dark:border-slate-700
+                      dark:bg-slate-900
+                      dark:text-slate-200
+                      dark:shadow-black/20
                     `
                 }
               `}
             >
-
               <p
                 className="
                   whitespace-pre-line
@@ -309,13 +327,10 @@ function AIChatPanel({ sendMessage }) {
               {/* Copy AI response */}
 
               {item.role === "ai" && (
-
                 <button
                   type="button"
                   onClick={() =>
-                    navigator.clipboard.writeText(
-                      item.text
-                    )
+                    navigator.clipboard.writeText(item.text)
                   }
                   aria-label="Copy response"
                   className="
@@ -337,19 +352,27 @@ function AIChatPanel({ sendMessage }) {
                     duration-200
                     group-hover:opacity-100
                     hover:bg-blue-50
+
+                    dark:border-slate-700
+                    dark:bg-slate-800
+                    dark:hover:bg-blue-500/10
                   "
                 >
-                  <Copy className="h-3.5 w-3.5 text-slate-600" />
+                  <Copy
+                    className="
+                      h-3.5
+                      w-3.5
+                      text-slate-600
+                      dark:text-slate-300
+                    "
+                  />
                 </button>
-
               )}
-
             </div>
 
             {/* User Avatar */}
 
             {item.role === "user" && (
-
               <div
                 className="
                   flex
@@ -362,15 +385,14 @@ function AIChatPanel({ sendMessage }) {
                   bg-slate-900
                   text-white
                   shadow-md
+
+                  dark:bg-slate-700
                 "
               >
                 <User className="h-5 w-5" />
               </div>
-
             )}
-
           </div>
-
         ))}
 
         {/* ================================================== */}
@@ -378,7 +400,6 @@ function AIChatPanel({ sendMessage }) {
         {/* ================================================== */}
 
         {showSuggestions && (
-
           <div
             className="
               ml-0
@@ -386,7 +407,6 @@ function AIChatPanel({ sendMessage }) {
               sm:ml-[52px]
             "
           >
-
             <p
               className="
                 mb-3
@@ -395,15 +415,15 @@ function AIChatPanel({ sendMessage }) {
                 uppercase
                 tracking-wider
                 text-slate-400
+
+                dark:text-slate-500
               "
             >
               Suggested questions
             </p>
 
             <div className="flex flex-wrap gap-3">
-
               {suggestedQuestions.map((question) => (
-
                 <button
                   key={question}
                   type="button"
@@ -427,17 +447,21 @@ function AIChatPanel({ sendMessage }) {
                     hover:bg-blue-50
                     hover:text-blue-700
                     hover:shadow-md
+
+                    dark:border-slate-700
+                    dark:bg-slate-900
+                    dark:text-slate-300
+                    dark:shadow-black/20
+                    dark:hover:border-blue-500/50
+                    dark:hover:bg-blue-500/10
+                    dark:hover:text-blue-300
                   "
                 >
                   {question}
                 </button>
-
               ))}
-
             </div>
-
           </div>
-
         )}
 
         {/* ================================================== */}
@@ -445,9 +469,7 @@ function AIChatPanel({ sendMessage }) {
         {/* ================================================== */}
 
         {loading && (
-
           <div className="flex items-end gap-3">
-
             <div
               className="
                 flex
@@ -478,15 +500,19 @@ function AIChatPanel({ sendMessage }) {
                 px-5
                 py-3.5
                 shadow-sm
+
+                dark:border-slate-700
+                dark:bg-slate-900
+                dark:shadow-black/20
               "
             >
-
               <Loader2
                 className="
                   h-4
                   w-4
                   animate-spin
                   text-blue-600
+                  dark:text-blue-400
                 "
               />
 
@@ -494,19 +520,16 @@ function AIChatPanel({ sendMessage }) {
                 className="
                   text-sm
                   text-slate-500
+                  dark:text-slate-400
                 "
               >
                 AI is thinking...
               </span>
-
             </div>
-
           </div>
-
         )}
 
         <div ref={messagesEndRef} />
-
       </div>
 
       {/* ================================================== */}
@@ -519,10 +542,15 @@ function AIChatPanel({ sendMessage }) {
           border-slate-200
           bg-white
           p-5
+          transition-colors
+          duration-300
+
+          dark:border-slate-800
+          dark:bg-slate-900
+
           sm:p-6
         "
       >
-
         <div
           className="
             flex
@@ -535,12 +563,18 @@ function AIChatPanel({ sendMessage }) {
             p-2.5
             transition-all
             duration-200
+
             focus-within:border-blue-400
             focus-within:bg-white
             focus-within:shadow-md
+
+            dark:border-slate-700
+            dark:bg-slate-950
+            dark:focus-within:border-blue-500
+            dark:focus-within:bg-slate-900
+            dark:focus-within:shadow-black/20
           "
         >
-
           <textarea
             rows={1}
             value={message}
@@ -570,6 +604,9 @@ function AIChatPanel({ sendMessage }) {
               text-slate-700
               outline-none
               placeholder:text-slate-400
+
+              dark:text-slate-200
+              dark:placeholder:text-slate-500
             "
           />
 
@@ -602,9 +639,7 @@ function AIChatPanel({ sendMessage }) {
               disabled:hover:translate-y-0
             "
           >
-
             {loading ? (
-
               <Loader2
                 className="
                   h-5
@@ -612,15 +647,10 @@ function AIChatPanel({ sendMessage }) {
                   animate-spin
                 "
               />
-
             ) : (
-
               <Send className="h-5 w-5" />
-
             )}
-
           </button>
-
         </div>
 
         <div
@@ -631,12 +661,14 @@ function AIChatPanel({ sendMessage }) {
             gap-1
             text-xs
             text-slate-400
+
+            dark:text-slate-500
+
             sm:flex-row
             sm:items-center
             sm:justify-between
           "
         >
-
           <span>
             Enter to send • Shift + Enter for a new line
           </span>
@@ -644,14 +676,10 @@ function AIChatPanel({ sendMessage }) {
           <span>
             Powered by QuickHelp AI
           </span>
-
         </div>
-
       </div>
-
     </section>
   );
 }
 
 export default AIChatPanel;
-

@@ -7,280 +7,833 @@ import {
   MessageSquareText,
   BarChart3,
 } from "lucide-react";
+
 import { Link } from "react-router-dom";
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white">
+    <section
+      className="
+        relative
+        overflow-hidden
+        bg-gradient-to-b
+        from-white
+        via-slate-50
+        to-white
+        transition-colors
+        duration-300
 
-      {/* Background */}
-      <div className="absolute inset-0">
+        dark:from-slate-950
+        dark:via-slate-900
+        dark:to-slate-950
+      "
+    >
+      {/* Background Decorative Glow */}
 
-        <div className="absolute left-10 top-10 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="
+            absolute
+            -left-24
+            top-20
+            h-72
+            w-72
+            rounded-full
+            bg-blue-500/10
+            blur-3xl
+            sm:h-80
+            sm:w-80
+            dark:bg-blue-500/10
+          "
+        />
 
-        <div className="absolute right-10 bottom-10 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl" />
+        <div
+          className="
+            absolute
+            right-[-100px]
+            top-1/3
+            h-72
+            w-72
+            rounded-full
+            bg-cyan-400/10
+            blur-3xl
+            sm:h-80
+            sm:w-80
+            dark:bg-cyan-500/10
+          "
+        />
 
+        <div
+          className="
+            absolute
+            bottom-[-100px]
+            left-1/3
+            h-72
+            w-72
+            rounded-full
+            bg-violet-400/10
+            blur-3xl
+            dark:bg-violet-500/10
+          "
+        />
       </div>
 
-      <div className="relative mx-auto grid min-h-[82vh] max-w-7xl items-center gap-20 px-6 py-20 lg:grid-cols-2">
+      <div
+        className="
+          relative
+          mx-auto
+          grid
+          min-h-[calc(100vh-5rem)]
+          max-w-7xl
+          items-center
+          gap-14
+          px-5
+          py-16
 
-        {/* LEFT */}
+          sm:px-6
+          sm:py-20
+
+          lg:grid-cols-2
+          lg:gap-16
+          lg:px-8
+          lg:py-24
+        "
+      >
+        {/* ========================================================= */}
+        {/* Left Content */}
+        {/* ========================================================= */}
 
         <div className="text-center lg:text-left">
 
-          <span className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-5 py-2 text-sm font-semibold text-blue-700 shadow-sm">
+          {/* Badge */}
+
+          <span
+            className="
+              inline-flex
+              items-center
+              rounded-full
+              border
+              border-blue-200
+              bg-blue-50
+              px-4
+              py-2
+              text-xs
+              font-semibold
+              tracking-wide
+              text-blue-700
+              shadow-sm
+
+              sm:px-5
+              sm:text-sm
+
+              dark:border-blue-900/60
+              dark:bg-blue-950/60
+              dark:text-blue-300
+            "
+          >
             AI Knowledge Platform
           </span>
 
-          <h1 className="mt-8 text-5xl font-extrabold leading-tight tracking-tight text-slate-900 lg:text-6xl">
+          {/* Heading */}
 
+          <h1
+            className="
+              mx-auto
+              mt-6
+              max-w-3xl
+              text-4xl
+              font-extrabold
+              leading-[1.1]
+              tracking-tight
+              text-slate-900
+
+              sm:mt-7
+              sm:text-5xl
+
+              lg:mx-0
+              lg:text-6xl
+
+              dark:text-white
+            "
+          >
             Build Your AI
 
-            <span className="block text-blue-600">
-
+            <span className="mt-1 block text-blue-600 dark:text-blue-400">
               Support Assistant
-
             </span>
-
           </h1>
 
-          <p className="mt-8 max-w-xl text-lg leading-8 text-slate-600">
+          {/* Description */}
 
-            Upload your documents, generate AI embeddings, and deliver instant
-            answers with an intelligent customer support assistant powered by
-            Retrieval-Augmented Generation (RAG).
+          <p
+            className="
+              mx-auto
+              mt-6
+              max-w-2xl
+              text-base
+              leading-7
+              text-slate-600
 
+              sm:mt-7
+              sm:text-lg
+              sm:leading-8
+
+              lg:mx-0
+
+              dark:text-slate-300
+            "
+          >
+            Upload your documents, generate AI embeddings, and deliver
+            instant answers with an intelligent customer support assistant
+            powered by Retrieval-Augmented Generation (RAG).
           </p>
 
-          {/* Features */}
+          {/* Key Benefits */}
 
-          <div className="mt-10 space-y-4">
+          <div
+            className="
+              mx-auto
+              mt-8
+              grid
+              max-w-md
+              gap-3
+              text-left
 
-            <div className="flex items-center justify-center gap-3 lg:justify-start">
+              sm:mt-9
 
-              <CheckCircle2
-                size={20}
-                className="text-green-600"
-              />
+              lg:mx-0
+              lg:max-w-none
+            "
+          >
+            {[
+              "Upload PDFs & FAQs",
+              "Semantic Search",
+              "Instant AI Responses",
+            ].map((item) => (
+              <div
+                key={item}
+                className="
+                  flex
+                  items-center
+                  justify-center
+                  gap-3
+                  text-sm
+                  text-slate-700
 
-              <span className="text-slate-700">
+                  sm:text-base
 
-                Upload PDFs & FAQs
+                  lg:justify-start
 
-              </span>
+                  dark:text-slate-300
+                "
+              >
+                <CheckCircle2
+                  size={19}
+                  className="
+                    shrink-0
+                    text-emerald-600
+                    dark:text-emerald-400
+                  "
+                />
 
-            </div>
-
-            <div className="flex items-center justify-center gap-3 lg:justify-start">
-
-              <CheckCircle2
-                size={20}
-                className="text-green-600"
-              />
-
-              <span className="text-slate-700">
-
-                Semantic Search
-
-              </span>
-
-            </div>
-
-            <div className="flex items-center justify-center gap-3 lg:justify-start">
-
-              <CheckCircle2
-                size={20}
-                className="text-green-600"
-              />
-
-              <span className="text-slate-700">
-
-                Instant AI Responses
-
-              </span>
-
-            </div>
-
+                <span>{item}</span>
+              </div>
+            ))}
           </div>
 
-          {/* Buttons */}
+          {/* CTA Buttons */}
 
-          <div className="mt-12 flex flex-wrap justify-center gap-5 lg:justify-start">
+          <div
+            className="
+              mx-auto
+              mt-10
+              flex
+              w-full
+              max-w-md
+              flex-col
+              gap-3
 
+              sm:mt-11
+              sm:flex-row
+              sm:justify-center
+
+              lg:mx-0
+              lg:max-w-none
+              lg:justify-start
+            "
+          >
             <Link
               to="/chat"
-              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-            >
+              className="
+                inline-flex
+                min-h-12
+                items-center
+                justify-center
+                gap-2
+                rounded-xl
+                bg-gradient-to-r
+                from-blue-600
+                to-cyan-500
+                px-6
+                py-3
+                text-base
+                font-semibold
+                text-white
+                shadow-lg
+                shadow-blue-600/20
+                transition-all
+                duration-300
 
+                hover:-translate-y-0.5
+                hover:shadow-xl
+                hover:shadow-blue-600/25
+
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-blue-500
+                focus-visible:ring-offset-2
+
+                sm:px-7
+                sm:text-lg
+              "
+            >
               Try AI Chat
 
-              <ArrowRight size={20} />
-
+              <ArrowRight className="h-5 w-5" />
             </Link>
 
             <Link
               to="/dashboard"
-              className="flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-8 py-4 text-lg font-semibold text-slate-700 shadow-md transition-all duration-300 hover:-translate-y-1 hover:bg-slate-100 hover:shadow-xl"
-            >
+              className="
+                inline-flex
+                min-h-12
+                items-center
+                justify-center
+                gap-2
+                rounded-xl
+                border
+                border-slate-300
+                bg-white
+                px-6
+                py-3
+                text-base
+                font-semibold
+                text-slate-700
+                shadow-sm
+                transition-all
+                duration-300
 
-              <PlayCircle size={22} />
+                hover:-translate-y-0.5
+                hover:border-slate-400
+                hover:bg-slate-50
+                hover:shadow-md
+
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-blue-500
+                focus-visible:ring-offset-2
+
+                sm:px-7
+                sm:text-lg
+
+                dark:border-slate-700
+                dark:bg-slate-900
+                dark:text-slate-200
+                dark:hover:border-slate-600
+                dark:hover:bg-slate-800
+              "
+            >
+              <PlayCircle className="h-5 w-5" />
 
               View Dashboard
-
             </Link>
-
           </div>
-
         </div>
 
-        {/* RIGHT */}
+        {/* ========================================================= */}
+        {/* Right Dashboard Preview */}
+        {/* ========================================================= */}
 
-        <div className="hidden lg:flex justify-center">
+        <div className="hidden justify-center lg:flex">
+          <div className="relative w-full max-w-lg">
 
-          <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-blue-200">
+            {/* Glow behind card */}
 
-            <div className="mb-8 flex items-center justify-between">
+            <div
+              className="
+                pointer-events-none
+                absolute
+                inset-8
+                rounded-[2.5rem]
+                bg-gradient-to-r
+                from-blue-400/20
+                via-violet-400/10
+                to-cyan-400/20
+                blur-3xl
+                dark:from-blue-500/10
+                dark:via-violet-500/10
+                dark:to-cyan-500/10
+              "
+            />
 
-              <h3 className="text-xl font-bold text-slate-900">
+            {/* Preview Card */}
 
-                Dashboard Preview
+            <div
+              className="
+                relative
+                overflow-hidden
+                rounded-[2rem]
+                border
+                border-slate-200
+                bg-white/95
+                p-6
+                shadow-2xl
+                backdrop-blur-sm
+                transition-all
+                duration-500
 
-              </h3>
+                hover:-translate-y-2
+                hover:shadow-blue-200/40
 
-              <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
+                sm:p-7
 
-                ● Online
+                dark:border-slate-700
+                dark:bg-slate-900/95
+                dark:hover:shadow-blue-950/50
+              "
+            >
+              {/* Top Bar */}
 
-              </span>
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <p
+                    className="
+                      text-xs
+                      font-semibold
+                      uppercase
+                      tracking-wider
+                      text-slate-400
+                    "
+                  >
+                    QuickHelp
+                  </p>
 
+                  <h3
+                    className="
+                      mt-1
+                      truncate
+                      text-xl
+                      font-bold
+                      text-slate-900
+                      dark:text-white
+                    "
+                  >
+                    Dashboard Preview
+                  </h3>
+                </div>
+
+                <span
+                  className="
+                    inline-flex
+                    shrink-0
+                    items-center
+                    gap-1.5
+                    rounded-full
+                    bg-emerald-100
+                    px-3
+                    py-1.5
+                    text-xs
+                    font-semibold
+                    text-emerald-700
+
+                    dark:bg-emerald-950/60
+                    dark:text-emerald-400
+                  "
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  Online
+                </span>
+              </div>
+
+              {/* Preview Items */}
+
+              <div className="mt-7 space-y-4">
+
+                {/* Upload */}
+
+                <div
+                  className="
+                    rounded-2xl
+                    border
+                    border-blue-100
+                    bg-gradient-to-r
+                    from-blue-50
+                    to-cyan-50
+                    p-4
+                    transition-all
+                    duration-300
+                    hover:-translate-y-0.5
+                    hover:shadow-md
+
+                    dark:border-blue-900/40
+                    dark:from-blue-950/50
+                    dark:to-cyan-950/30
+                  "
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex min-w-0 items-center gap-3">
+
+                      <div
+                        className="
+                          flex
+                          h-10
+                          w-10
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-xl
+                          bg-gradient-to-br
+                          from-blue-500
+                          to-cyan-500
+                          text-white
+                          shadow-sm
+                        "
+                      >
+                        <Upload className="h-5 w-5" />
+                      </div>
+
+                      <div className="min-w-0">
+                        <p
+                          className="
+                            truncate
+                            font-semibold
+                            text-slate-800
+                            dark:text-slate-200
+                          "
+                        >
+                          Upload Documents
+                        </p>
+
+                        <p
+                          className="
+                            mt-0.5
+                            text-xs
+                            text-slate-500
+                            dark:text-slate-400
+                          "
+                        >
+                          Knowledge Base
+                        </p>
+                      </div>
+                    </div>
+
+                    <span
+                      className="
+                        shrink-0
+                        text-sm
+                        font-semibold
+                        text-blue-600
+                        dark:text-blue-400
+                      "
+                    >
+                      Documents Ready
+                    </span>
+                  </div>
+                </div>
+
+                {/* Embeddings */}
+
+                <div
+                  className="
+                    rounded-2xl
+                    border
+                    border-violet-100
+                    bg-gradient-to-r
+                    from-violet-50
+                    to-purple-50
+                    p-4
+                    transition-all
+                    duration-300
+                    hover:-translate-y-0.5
+                    hover:shadow-md
+
+                    dark:border-violet-900/40
+                    dark:from-violet-950/50
+                    dark:to-purple-950/30
+                  "
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex min-w-0 items-center gap-3">
+
+                      <div
+                        className="
+                          flex
+                          h-10
+                          w-10
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-xl
+                          bg-gradient-to-br
+                          from-violet-500
+                          to-purple-500
+                          text-white
+                          shadow-sm
+                        "
+                      >
+                        <BrainCircuit className="h-5 w-5" />
+                      </div>
+
+                      <div className="min-w-0">
+                        <p
+                          className="
+                            truncate
+                            font-semibold
+                            text-slate-800
+                            dark:text-slate-200
+                          "
+                        >
+                          Generate Embeddings
+                        </p>
+
+                        <p
+                          className="
+                            mt-0.5
+                            text-xs
+                            text-slate-500
+                            dark:text-slate-400
+                          "
+                        >
+                          AI Knowledge
+                        </p>
+                      </div>
+                    </div>
+
+                    <span
+                      className="
+                        shrink-0
+                        text-sm
+                        font-semibold
+                        text-emerald-600
+                        dark:text-emerald-400
+                      "
+                    >
+                      Completed
+                    </span>
+                  </div>
+                </div>
+
+                {/* AI Chat */}
+
+                <div
+                  className="
+                    rounded-2xl
+                    border
+                    border-emerald-100
+                    bg-gradient-to-r
+                    from-emerald-50
+                    to-green-50
+                    p-4
+                    transition-all
+                    duration-300
+                    hover:-translate-y-0.5
+                    hover:shadow-md
+
+                    dark:border-emerald-900/40
+                    dark:from-emerald-950/50
+                    dark:to-green-950/30
+                  "
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex min-w-0 items-center gap-3">
+
+                      <div
+                        className="
+                          flex
+                          h-10
+                          w-10
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-xl
+                          bg-gradient-to-br
+                          from-emerald-500
+                          to-green-500
+                          text-white
+                          shadow-sm
+                        "
+                      >
+                        <MessageSquareText className="h-5 w-5" />
+                      </div>
+
+                      <div className="min-w-0">
+                        <p
+                          className="
+                            truncate
+                            font-semibold
+                            text-slate-800
+                            dark:text-slate-200
+                          "
+                        >
+                          AI Chat
+                        </p>
+
+                        <p
+                          className="
+                            mt-0.5
+                            text-xs
+                            text-slate-500
+                            dark:text-slate-400
+                          "
+                        >
+                          Customer Support
+                        </p>
+                      </div>
+                    </div>
+
+                    <span
+                      className="
+                        shrink-0
+                        text-sm
+                        font-semibold
+                        text-emerald-600
+                        dark:text-emerald-400
+                      "
+                    >
+                      Ready
+                    </span>
+                  </div>
+                </div>
+
+                {/* Analytics */}
+
+                <div
+                  className="
+                    rounded-2xl
+                    border
+                    border-orange-100
+                    bg-gradient-to-r
+                    from-orange-50
+                    to-amber-50
+                    p-4
+                    transition-all
+                    duration-300
+                    hover:-translate-y-0.5
+                    hover:shadow-md
+
+                    dark:border-orange-900/40
+                    dark:from-orange-950/50
+                    dark:to-amber-950/30
+                  "
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex min-w-0 items-center gap-3">
+
+                      <div
+                        className="
+                          flex
+                          h-10
+                          w-10
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-xl
+                          bg-gradient-to-br
+                          from-orange-500
+                          to-amber-500
+                          text-white
+                          shadow-sm
+                        "
+                      >
+                        <BarChart3 className="h-5 w-5" />
+                      </div>
+
+                      <div className="min-w-0">
+                        <p
+                          className="
+                            truncate
+                            font-semibold
+                            text-slate-800
+                            dark:text-slate-200
+                          "
+                        >
+                          Analytics
+                        </p>
+
+                        <p
+                          className="
+                            mt-0.5
+                            text-xs
+                            text-slate-500
+                            dark:text-slate-400
+                          "
+                        >
+                          Performance
+                        </p>
+                      </div>
+                    </div>
+
+                    <span
+                      className="
+                        shrink-0
+                        text-sm
+                        font-semibold
+                        text-orange-600
+                        dark:text-orange-400
+                      "
+                    >
+                      AI Ready
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Status */}
+
+              <div
+                className="
+                  mt-6
+                  flex
+                  items-center
+                  justify-between
+                  gap-4
+                  rounded-2xl
+                  border
+                  border-slate-200
+                  bg-slate-50
+                  px-4
+                  py-3
+
+                  dark:border-slate-800
+                  dark:bg-slate-950
+                "
+              >
+                <span
+                  className="
+                    text-xs
+                    font-medium
+                    text-slate-500
+                    dark:text-slate-400
+                  "
+                >
+                  AI System Status
+                </span>
+
+                <span
+                  className="
+                    text-xs
+                    font-semibold
+                    text-emerald-600
+                    dark:text-emerald-400
+                  "
+                >
+                  All Systems Ready
+                </span>
+              </div>
             </div>
-
-            <div className="space-y-5">
-
-              <div className="rounded-2xl bg-blue-50 p-4">
-
-                <div className="flex items-center justify-between">
-
-                  <div className="flex items-center gap-3">
-
-                    <Upload
-                      size={20}
-                      className="text-blue-600"
-                    />
-
-                    <span className="font-medium text-slate-800">
-
-                      Upload Documents
-
-                    </span>
-
-                  </div>
-
-                  <span className="text-sm text-slate-500">
-
-                    4 Files
-
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="rounded-2xl bg-violet-50 p-4">
-
-                <div className="flex items-center justify-between">
-
-                  <div className="flex items-center gap-3">
-
-                    <BrainCircuit
-                      size={20}
-                      className="text-violet-600"
-                    />
-
-                    <span className="font-medium text-slate-800">
-
-                      Generate Embeddings
-
-                    </span>
-
-                  </div>
-
-                  <span className="text-sm font-medium text-green-600">
-
-                    Completed
-
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="rounded-2xl bg-green-50 p-4">
-
-                <div className="flex items-center justify-between">
-
-                  <div className="flex items-center gap-3">
-
-                    <MessageSquareText
-                      size={20}
-                      className="text-green-600"
-                    />
-
-                    <span className="font-medium text-slate-800">
-
-                      AI Chat
-
-                    </span>
-
-                  </div>
-
-                  <span className="text-sm font-medium text-green-600">
-
-                    Ready
-
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="rounded-2xl bg-orange-50 p-4">
-
-                <div className="flex items-center justify-between">
-
-                  <div className="flex items-center gap-3">
-
-                    <BarChart3
-                      size={20}
-                      className="text-orange-500"
-                    />
-
-                    <span className="font-medium text-slate-800">
-
-                      Analytics
-
-                    </span>
-
-                  </div>
-
-                  <span className="text-sm font-medium text-orange-600">
-
-                    98% Accuracy
-
-                  </span>
-
-                </div>
-
-              </div>
-
-            </div>
-
           </div>
-
         </div>
-
       </div>
-
     </section>
   );
 }

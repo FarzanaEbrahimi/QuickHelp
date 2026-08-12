@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 
 import {
@@ -49,9 +50,18 @@ function UploadCard({
         border-slate-200
         bg-white
         shadow-sm
+
+        transition-colors
+        duration-300
+
+        dark:border-slate-800
+        dark:bg-slate-900
+        dark:shadow-none
       "
     >
+      {/* ========================================= */}
       {/* Header */}
+      {/* ========================================= */}
 
       <div
         className="
@@ -62,9 +72,12 @@ function UploadCard({
           to-cyan-500
           p-7
           text-white
+
+          dark:border-blue-900/40
         "
       >
         <div className="flex items-center gap-4">
+
           <div
             className="
               flex
@@ -75,6 +88,7 @@ function UploadCard({
               justify-center
               rounded-2xl
               bg-white/15
+              backdrop-blur-sm
             "
           >
             <UploadCloud className="h-7 w-7" />
@@ -85,16 +99,37 @@ function UploadCard({
               Add a Document
             </h2>
 
-            <p className="mt-1 text-sm leading-6 text-blue-100">
+            <p
+              className="
+                mt-1
+                text-sm
+                leading-6
+                text-blue-100
+              "
+            >
               Upload a file to give your AI assistant more information.
             </p>
           </div>
+
         </div>
       </div>
 
+      {/* ========================================= */}
       {/* Body */}
+      {/* ========================================= */}
 
-      <div className="p-6">
+      <div
+        className="
+          p-6
+          transition-colors
+          duration-300
+
+          dark:bg-slate-900
+        "
+      >
+
+        {/* Drop Zone */}
+
         <div
           onDragOver={onDragOver}
           onDragLeave={onDragLeave}
@@ -113,11 +148,14 @@ function UploadCard({
 
             ${
               dragActive
-                ? "border-blue-500 bg-blue-50"
-                : "border-slate-300 bg-slate-50 hover:border-blue-400 hover:bg-blue-50/50"
+                ? "border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-500/10"
+                : "border-slate-300 bg-slate-50 hover:border-blue-400 hover:bg-blue-50/50 dark:border-slate-700 dark:bg-slate-800/60 dark:hover:border-blue-500 dark:hover:bg-blue-500/10"
             }
           `}
         >
+
+          {/* Upload Icon */}
+
           <div
             className="
               mx-auto
@@ -129,13 +167,19 @@ function UploadCard({
               rounded-full
               bg-blue-100
               text-blue-600
-              transition-transform
+              transition-all
               duration-300
+
               group-hover:scale-105
+
+              dark:bg-blue-500/10
+              dark:text-blue-400
             "
           >
             <UploadCloud className="h-9 w-9" />
           </div>
+
+          {/* Title */}
 
           <h3
             className="
@@ -143,10 +187,16 @@ function UploadCard({
               text-xl
               font-bold
               text-slate-900
+              transition-colors
+              duration-300
+
+              dark:text-white
             "
           >
             Drop your file here
           </h3>
+
+          {/* Description */}
 
           <p
             className="
@@ -154,10 +204,16 @@ function UploadCard({
               text-sm
               leading-6
               text-slate-500
+              transition-colors
+              duration-300
+
+              dark:text-slate-400
             "
           >
             Or choose a file from your computer.
           </p>
+
+          {/* Supported File Types */}
 
           <div
             className="
@@ -181,13 +237,22 @@ function UploadCard({
                   text-xs
                   font-semibold
                   text-slate-600
+                  transition-colors
+                  duration-300
+
+                  dark:border-slate-700
+                  dark:bg-slate-900
+                  dark:text-slate-300
                 "
               >
                 {type}
               </span>
             ))}
           </div>
+
         </div>
+
+        {/* Hidden File Input */}
 
         <input
           ref={fileInputRef}
@@ -196,6 +261,8 @@ function UploadCard({
           className="hidden"
           onChange={handleUpload}
         />
+
+        {/* Choose File Button */}
 
         <button
           type="button"
@@ -218,14 +285,21 @@ function UploadCard({
             shadow-sm
             transition-all
             duration-200
+
             hover:-translate-y-0.5
             hover:bg-blue-700
             hover:shadow-md
+
+            dark:bg-blue-600
+            dark:hover:bg-blue-500
           "
         >
           <ArrowUp className="h-4 w-4" />
+
           Choose a File
         </button>
+
+        {/* Processing Info */}
 
         <div
           className="
@@ -236,6 +310,10 @@ function UploadCard({
             gap-2
             text-xs
             text-slate-400
+            transition-colors
+            duration-300
+
+            dark:text-slate-500
           "
         >
           <FileText className="h-4 w-4" />
@@ -244,6 +322,7 @@ function UploadCard({
             Your file will be processed automatically after upload.
           </span>
         </div>
+
       </div>
     </section>
   );

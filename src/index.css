@@ -1,13 +1,71 @@
 @import "tailwindcss";
 
+/* =========================================================
+   QuickHelp AI - Tailwind v4 Dark Mode
+   ========================================================= */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================================================
+   Base
+   ========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+  background: #f8fafc;
+}
+
+html.dark {
+  background: #020617;
+}
+
 body {
   margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
   font-family: Inter, Arial, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  transition:
+    background-color 300ms ease,
+    color 300ms ease;
 }
+
+html.dark body {
+  background: #020617;
+  color: #f8fafc;
+}
+
+/* =========================================================
+   Inputs
+   ========================================================= */
+
 .input-style {
   @apply mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-5 py-4 outline-none transition focus:bg-white focus:ring-2 focus:ring-blue-500/30;
+}
+
+html.dark .input-style {
+  @apply border-slate-700 bg-slate-900 text-white placeholder:text-slate-500 focus:bg-slate-800 focus:ring-blue-500/30;
+}
+
+/* =========================================================
+   Smooth Dark Mode
+   ========================================================= */
+
+body,
+section,
+header,
+input,
+button,
+textarea,
+select {
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    color 300ms ease,
+    box-shadow 300ms ease;
 }

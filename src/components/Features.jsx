@@ -3,7 +3,6 @@ import {
   Database,
   Search,
   Upload,
-  ArrowRight,
 } from "lucide-react";
 
 const features = [
@@ -12,24 +11,48 @@ const features = [
     title: "AI Chat",
     text: "Answer customer questions instantly with AI-powered conversations.",
     color: "from-blue-500 to-cyan-500",
+    background:
+      "bg-gradient-to-br from-blue-50 via-white to-cyan-50",
+    darkBackground:
+      "dark:from-blue-950/40 dark:via-slate-900 dark:to-cyan-950/30",
+    border:
+      "hover:border-blue-200 dark:hover:border-blue-900",
   },
   {
     icon: Database,
     title: "Knowledge Base",
     text: "Store FAQs, manuals and support documents in one place.",
     color: "from-violet-500 to-purple-500",
+    background:
+      "bg-gradient-to-br from-violet-50 via-white to-purple-50",
+    darkBackground:
+      "dark:from-violet-950/40 dark:via-slate-900 dark:to-purple-950/30",
+    border:
+      "hover:border-violet-200 dark:hover:border-violet-900",
   },
   {
     icon: Search,
     title: "Semantic Search",
     text: "Find the most relevant answers using vector similarity search.",
     color: "from-emerald-500 to-green-500",
+    background:
+      "bg-gradient-to-br from-emerald-50 via-white to-green-50",
+    darkBackground:
+      "dark:from-emerald-950/40 dark:via-slate-900 dark:to-green-950/30",
+    border:
+      "hover:border-emerald-200 dark:hover:border-emerald-900",
   },
   {
     icon: Upload,
     title: "Document Upload",
     text: "Upload PDFs and build your AI knowledge base in seconds.",
     color: "from-orange-500 to-amber-500",
+    background:
+      "bg-gradient-to-br from-orange-50 via-white to-amber-50",
+    darkBackground:
+      "dark:from-orange-950/40 dark:via-slate-900 dark:to-amber-950/30",
+    border:
+      "hover:border-orange-200 dark:hover:border-orange-900",
   },
 ];
 
@@ -37,82 +60,169 @@ function Features() {
   return (
     <section
       id="features"
-      className="bg-white py-28"
+      className="
+        bg-white
+        py-20
+        transition-colors
+        duration-300
+        sm:py-24
+        lg:py-28
+        dark:bg-slate-950
+      "
     >
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
 
-        <div className="text-center">
+        {/* Header */}
 
-          <span className="rounded-full bg-blue-100 px-5 py-2 text-sm font-semibold text-blue-700">
+        <div className="mx-auto max-w-3xl text-center">
+
+          <span
+            className="
+              inline-flex
+              items-center
+              rounded-full
+              bg-blue-100
+              px-5
+              py-2
+              text-xs
+              font-semibold
+              tracking-wide
+              text-blue-700
+              sm:text-sm
+              dark:bg-blue-950/60
+              dark:text-blue-300
+            "
+          >
             FEATURES
           </span>
 
-          <h2 className="mt-6 text-5xl font-extrabold text-slate-900">
+          <h2
+            className="
+              mt-5
+              text-3xl
+              font-extrabold
+              tracking-tight
+              text-slate-900
+              sm:text-4xl
+              lg:text-5xl
+              dark:text-white
+            "
+          >
             Everything You Need
           </h2>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+          <p
+            className="
+              mx-auto
+              mt-5
+              max-w-2xl
+              text-base
+              leading-7
+              text-slate-600
+              sm:text-lg
+              sm:leading-8
+              dark:text-slate-300
+            "
+          >
             Powerful tools designed to automate customer support and
             deliver accurate AI responses.
           </p>
 
         </div>
 
-        <div className="mt-20 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+        {/* Feature Cards */}
 
+        <div
+          className="
+            mt-14
+            grid
+            gap-6
+            sm:mt-16
+            sm:grid-cols-2
+            lg:mt-20
+            xl:grid-cols-4
+          "
+        >
           {features.map((feature) => {
-
             const Icon = feature.icon;
 
             return (
-
               <div
                 key={feature.title}
-                className="group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-500 hover:-translate-y-3 hover:border-blue-200 hover:shadow-2xl"
+                className={`
+                  group
+                  rounded-3xl
+                  border
+                  border-slate-200
+                  p-7
+                  shadow-sm
+                  transition-all
+                  duration-300
+                  ${feature.background}
+                  ${feature.darkBackground}
+                  ${feature.border}
+
+                  hover:-translate-y-1
+                  hover:shadow-xl
+
+                  dark:border-slate-800
+                `}
               >
 
+                {/* Icon */}
+
                 <div
-                  className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r ${feature.color} shadow-lg`}
+                  className={`
+                    flex
+                    h-14
+                    w-14
+                    items-center
+                    justify-center
+                    rounded-2xl
+                    bg-gradient-to-br
+                    ${feature.color}
+                    shadow-lg
+                    transition-transform
+                    duration-300
+                    group-hover:scale-105
+                  `}
                 >
-                  <Icon className="h-8 w-8 text-white" />
+                  <Icon className="h-7 w-7 text-white" />
                 </div>
 
-                <h3 className="mt-8 text-2xl font-bold text-slate-900">
+                {/* Title */}
+
+                <h3
+                  className="
+                    mt-7
+                    text-xl
+                    font-bold
+                    text-slate-900
+                    sm:text-2xl
+                    dark:text-white
+                  "
+                >
                   {feature.title}
                 </h3>
 
-                <p className="mt-4 leading-8 text-slate-600">
+                {/* Description */}
+
+                <p
+                  className="
+                    mt-3
+                    text-sm
+                    leading-7
+                    text-slate-600
+                    sm:text-base
+                    dark:text-slate-300
+                  "
+                >
                   {feature.text}
                 </p>
 
-                <div
-                  className="
-                    mt-8
-                    flex
-                    items-center
-                    gap-2
-                    font-semibold
-                    text-blue-600
-                    transition-all
-                    duration-300
-                    group-hover:gap-4
-                  "
-                >
-                  Learn More
-
-                  <ArrowRight
-                    size={18}
-                    className="transition-transform duration-300 group-hover:translate-x-1"
-                  />
-
-                </div>
-
               </div>
-
             );
-
           })}
-
         </div>
 
       </div>

@@ -1,3 +1,4 @@
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -10,7 +11,17 @@ import About from "../components/About";
 
 function Home() {
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div
+      className="
+        min-h-screen
+        bg-white
+        text-slate-900
+        transition-colors
+        duration-300
+        dark:bg-slate-950
+        dark:text-white
+      "
+    >
       <Navbar />
 
       <Hero />
