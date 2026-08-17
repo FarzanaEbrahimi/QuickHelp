@@ -77,6 +77,35 @@ function DashboardSidebar({
 
 
   // ==================================================
+  // Close Mobile Sidebar With Escape
+  // ==================================================
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener(
+      "keydown",
+      handleEscape
+    );
+
+    return () => {
+      window.removeEventListener(
+        "keydown",
+        handleEscape
+      );
+    };
+  }, [isOpen, onClose]);
+
+
+  // ==================================================
   // Sidebar Items
   // ==================================================
 
@@ -273,6 +302,34 @@ function DashboardSidebar({
   return (
     <>
       {/* ==================================================
+          Mobile Backdrop
+      ================================================== */}
+
+      {isOpen && (
+        <div
+          className="
+            fixed
+            inset-0
+            z-40
+
+            bg-slate-950/25
+
+            backdrop-blur-[3px]
+
+            transition-opacity
+            duration-300
+
+            dark:bg-black/50
+
+            xl:hidden
+          "
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+
+
+      {/* ==================================================
           Sidebar
       ================================================== */}
 
@@ -282,53 +339,66 @@ function DashboardSidebar({
           left-0
           top-20
           z-50
+
           flex
           h-[calc(100vh-5rem)]
           w-72
+          max-w-[88vw]
           flex-col
           overflow-hidden
 
           border-r
-          border-slate-200/80
+          border-white/50
 
-          bg-gradient-to-b
-          from-white
-          via-slate-50
-          to-blue-50/40
+          bg-white/75
 
           px-5
           py-6
 
-          shadow-xl
-          shadow-slate-200/40
+          shadow-2xl
+          shadow-slate-900/10
+
+          backdrop-blur-2xl
+          backdrop-saturate-150
 
           transition-all
           duration-300
+          ease-out
 
-          dark:border-slate-800/80
-
-          dark:bg-gradient-to-b
-          dark:from-slate-950
-          dark:via-slate-900
-          dark:to-[#0b172a]
-
+          dark:border-slate-700/50
+          dark:bg-slate-950/75
           dark:shadow-black/40
 
           xl:sticky
           xl:top-20
           xl:z-0
+          xl:max-w-none
+          xl:border-r
+          xl:border-slate-200/80
+          xl:bg-gradient-to-b
+          xl:from-white
+          xl:via-slate-50
+          xl:to-blue-50/40
           xl:shadow-none
+          xl:backdrop-blur-none
+          xl:backdrop-saturate-100
+
+          dark:xl:border-slate-800/80
+          dark:xl:bg-gradient-to-b
+          dark:xl:from-slate-950
+          dark:xl:via-slate-900
+          dark:xl:to-[#0b172a]
 
           ${
             isOpen
-              ? "translate-x-0"
-              : "-translate-x-full xl:translate-x-0"
+              ? "translate-x-0 opacity-100"
+              : "-translate-x-full opacity-0 xl:translate-x-0 xl:opacity-100"
           }
         `}
       >
 
         {/* ==================================================
-            Decorative Background
+            Glass Decorative Background
         ================================================== */}
 
         <div
@@ -337,13 +407,17 @@ function DashboardSidebar({
             absolute
             -right-24
             -top-24
-            h-56
-            w-56
+
+            h-64
+            w-64
+
             rounded-full
-            bg-blue-500/5
+
+            bg-blue-500/10
+
             blur-3xl
 
-            dark:bg-blue-500/10
+            dark:bg-blue-500/15
           "
         />
 
@@ -353,13 +427,39 @@ function DashboardSidebar({
             absolute
             -bottom-24
             -left-24
-            h-56
-            w-56
+
+            h-64
+            w-64
+
             rounded-full
-            bg-cyan-400/5
+
+            bg-cyan-400/10
+
             blur-3xl
 
             dark:bg-cyan-400/10
+          "
+        />
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            left-1/2
+            top-1/3
+
+            h-40
+            w-40
+
+            -translate-x-1/2
+
+            rounded-full
+
+            bg-violet-400/5
+
+            blur-3xl
+
+            dark:bg-violet-500/5
           "
         />
 
@@ -372,14 +472,23 @@ function DashboardSidebar({
           className="
             relative
             mb-7
+
             flex
             items-center
             justify-between
+
             xl:hidden
           "
         >
 
-          <div className="flex min-w-0 items-center gap-3">
+          <div
+            className="
+              flex
+              min-w-0
+              items-center
+              gap-3
+            "
+          >
 
             {/* Logo */}
 
@@ -391,6 +500,7 @@ function DashboardSidebar({
                 shrink-0
                 items-center
                 justify-center
+
                 rounded-2xl
 
                 bg-gradient-to-br
@@ -416,7 +526,9 @@ function DashboardSidebar({
                 className="
                   truncate
                   font-bold
+
                   text-slate-900
+
                   dark:text-white
                 "
               >
@@ -427,9 +539,12 @@ function DashboardSidebar({
                 className="
                   mt-0.5
                   truncate
+
                   text-xs
                   font-medium
+
                   text-slate-500
+
                   dark:text-slate-400
                 "
               >
@@ -437,6 +552,7 @@ function DashboardSidebar({
               </p>
 
             </div>
+
           </div>
 
 
@@ -447,17 +563,35 @@ function DashboardSidebar({
             onClick={onClose}
             className="
               shrink-0
+
               rounded-xl
+
+              border
+              border-slate-200/70
+
+              bg-white/50
+
               p-2
 
               text-slate-500
-              transition-all
 
-              hover:bg-slate-100
+              shadow-sm
+
+              backdrop-blur-md
+
+              transition-all
+              duration-200
+
+              hover:border-slate-300
+              hover:bg-white/80
               hover:text-slate-900
 
+              dark:border-slate-700/70
+              dark:bg-slate-900/40
               dark:text-slate-400
-              dark:hover:bg-slate-800
+
+              dark:hover:border-slate-600
+              dark:hover:bg-slate-800/70
               dark:hover:text-white
 
               focus-visible:outline-none
@@ -479,14 +613,16 @@ function DashboardSidebar({
         <nav
           className="
             relative
+
             flex-1
             space-y-2
+
             overflow-y-auto
             pr-1
 
             scrollbar-thin
             scrollbar-track-transparent
-            scrollbar-thumb-slate-200
+            scrollbar-thumb-slate-300/70
 
             dark:scrollbar-thumb-slate-700
           "
@@ -541,12 +677,18 @@ function DashboardSidebar({
                   className={`
                     group
                     relative
+
                     flex
                     w-full
                     items-center
                     gap-3
+
                     overflow-hidden
+
                     rounded-2xl
+
+                    border
+
                     px-3
                     py-3
 
@@ -565,18 +707,31 @@ function DashboardSidebar({
                           ${item.activeBg}
                           ${item.activeText}
 
-                          shadow-sm
-                          shadow-slate-200/50
+                          border-white/60
 
+                          shadow-sm
+                          shadow-slate-300/30
+
+                          backdrop-blur-md
+
+                          dark:border-slate-700/40
                           dark:shadow-none
                         `
                         : `
+                          border-transparent
+
                           text-slate-600
+
                           ${item.hover}
 
+                          hover:border-white/50
                           hover:text-slate-900
 
+                          hover:shadow-sm
+                          hover:backdrop-blur-md
+
                           dark:text-slate-400
+                          dark:hover:border-slate-700/40
                           dark:hover:text-white
                         `
                     }
@@ -591,9 +746,12 @@ function DashboardSidebar({
                         absolute
                         left-0
                         top-1/2
+
                         h-8
                         w-1
+
                         -translate-y-1/2
+
                         rounded-r-full
 
                         ${
@@ -619,12 +777,14 @@ function DashboardSidebar({
                   <div
                     className={`
                       relative
+
                       flex
                       h-10
                       w-10
                       shrink-0
                       items-center
                       justify-center
+
                       rounded-xl
 
                       transition-all
@@ -634,10 +794,11 @@ function DashboardSidebar({
                         active
                           ? item.iconBg
                           : `
-                            bg-slate-100/80
+                            bg-slate-100/70
+
                             group-hover:scale-105
 
-                            dark:bg-slate-800/80
+                            dark:bg-slate-800/70
                           `
                       }
                     `}
@@ -668,6 +829,7 @@ function DashboardSidebar({
                   <span
                     className={`
                       font-semibold
+
                       transition-colors
                       duration-200
 
@@ -688,9 +850,11 @@ function DashboardSidebar({
                     <span
                       className={`
                         ml-auto
+
                         h-2
                         w-2
                         shrink-0
+
                         rounded-full
 
                         ${
@@ -726,12 +890,18 @@ function DashboardSidebar({
         <div
           className="
             relative
+
             mt-6
+
             border-t
-            border-slate-200/80
+            border-white/60
+
             pt-5
 
-            dark:border-slate-800
+            dark:border-slate-700/60
+
+            xl:border-slate-200/80
+            dark:xl:border-slate-800
           "
         >
 
@@ -740,23 +910,32 @@ function DashboardSidebar({
           <div
             className="
               rounded-2xl
-              border
-              border-slate-200/80
 
-              bg-white/70
+              border
+              border-white/60
+
+              bg-white/55
 
               p-3
 
               shadow-sm
+              shadow-slate-900/5
 
-              backdrop-blur-sm
+              backdrop-blur-xl
 
-              dark:border-slate-800
-              dark:bg-slate-900/60
+              dark:border-slate-700/50
+              dark:bg-slate-900/55
+              dark:shadow-black/20
             "
           >
 
-            <div className="flex items-center gap-3">
+            <div
+              className="
+                flex
+                items-center
+                gap-3
+              "
+            >
 
               {/* Avatar */}
 
@@ -768,6 +947,7 @@ function DashboardSidebar({
                   shrink-0
                   items-center
                   justify-center
+
                   rounded-full
 
                   bg-gradient-to-br
@@ -793,8 +973,10 @@ function DashboardSidebar({
                 <p
                   className="
                     truncate
+
                     text-sm
                     font-bold
+
                     text-slate-900
 
                     dark:text-white
@@ -806,8 +988,10 @@ function DashboardSidebar({
                 <p
                   className="
                     truncate
+
                     text-xs
                     font-semibold
+
                     text-blue-600
 
                     dark:text-blue-400
@@ -820,8 +1004,10 @@ function DashboardSidebar({
                   className="
                     mt-0.5
                     truncate
+
                     text-[10px]
                     font-medium
+
                     text-slate-400
 
                     dark:text-slate-500
@@ -844,34 +1030,41 @@ function DashboardSidebar({
               }
               className="
                 mt-3
+
                 flex
                 w-full
                 items-center
                 justify-center
                 gap-2
+
                 rounded-xl
 
                 border
-                border-slate-200
+                border-slate-200/70
 
-                bg-slate-50/80
+                bg-white/45
 
                 px-4
                 py-2.5
 
                 text-xs
                 font-bold
+
                 text-slate-600
+
+                shadow-sm
+
+                backdrop-blur-md
 
                 transition-all
                 duration-200
 
                 hover:border-red-200
-                hover:bg-red-50
+                hover:bg-red-50/70
                 hover:text-red-600
 
-                dark:border-slate-700
-                dark:bg-slate-800/60
+                dark:border-slate-700/70
+                dark:bg-slate-800/45
                 dark:text-slate-400
 
                 dark:hover:border-red-900/60
@@ -905,6 +1098,7 @@ function DashboardSidebar({
             fixed
             inset-0
             z-[100]
+
             flex
             items-center
             justify-center
@@ -976,6 +1170,7 @@ function DashboardSidebar({
             <h3
               className="
                 mt-6
+
                 text-2xl
                 font-black
                 tracking-tight
@@ -994,6 +1189,7 @@ function DashboardSidebar({
             <p
               className="
                 mt-3
+
                 leading-7
 
                 text-slate-500
@@ -1017,6 +1213,7 @@ function DashboardSidebar({
                 }
                 className="
                   flex-1
+
                   rounded-xl
 
                   border
@@ -1026,6 +1223,7 @@ function DashboardSidebar({
                   py-3
 
                   font-semibold
+
                   text-slate-700
 
                   transition
@@ -1046,6 +1244,7 @@ function DashboardSidebar({
                 onClick={handleSignOut}
                 className="
                   flex-1
+
                   rounded-xl
 
                   bg-red-600

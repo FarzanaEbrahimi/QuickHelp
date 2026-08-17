@@ -8,12 +8,10 @@ import {
   Upload,
   Clock3,
   CheckCircle2,
-  Sparkles,
 } from "lucide-react";
 
 import { supabase } from "../lib/supabase";
 
-import DashboardHeader from "../components/DashboardHeader";
 import DashboardStats from "../components/DashboardStats";
 
 function Dashboard() {
@@ -67,15 +65,6 @@ function Dashboard() {
       "
     >
       {/* ==================================================
-          Dashboard Header
-      ================================================== */}
-
-      <DashboardHeader
-        userName="Farzana"
-        showSearch={false}
-      />
-
-      {/* ==================================================
           Main Dashboard
       ================================================== */}
 
@@ -94,361 +83,353 @@ function Dashboard() {
             Welcome Hero
         ================================================== */}
 
-        {/* ==================================================
-    Welcome Hero
-================================================== */}
-
-<section
-  className="
-    relative
-    overflow-hidden
-    rounded-[32px]
-    border
-    border-blue-100
-    bg-gradient-to-br
-    from-white
-    via-blue-50
-    to-cyan-50
-    p-7
-    shadow-lg
-    shadow-blue-100/50
-    transition-all
-    duration-300
-
-    dark:border-blue-900/40
-    dark:from-slate-900
-    dark:via-blue-950/60
-    dark:to-slate-900
-    dark:shadow-black/20
-
-    lg:p-10
-  "
->
-  {/* ==================================================
-      Decorative Background
-  ================================================== */}
-
-  <div
-    className="
-      pointer-events-none
-      absolute
-      -right-24
-      -top-24
-      h-72
-      w-72
-      rounded-full
-      bg-blue-400/10
-      blur-3xl
-
-      dark:bg-blue-500/10
-    "
-  />
-
-  <div
-    className="
-      pointer-events-none
-      absolute
-      -bottom-32
-      left-1/3
-      h-80
-      w-80
-      rounded-full
-      bg-cyan-400/10
-      blur-3xl
-
-      dark:bg-cyan-400/10
-    "
-  />
-
-  <div
-    className="
-      pointer-events-none
-      absolute
-      left-1/2
-      top-1/2
-      h-64
-      w-64
-      -translate-x-1/2
-      -translate-y-1/2
-      rounded-full
-      bg-blue-300/5
-      blur-3xl
-
-      dark:bg-blue-500/5
-    "
-  />
-
-  {/* ==================================================
-      Hero Content
-  ================================================== */}
-
-  <div
-    className="
-      relative
-      flex
-      flex-col
-      gap-8
-      lg:flex-row
-      lg:items-center
-      lg:justify-between
-    "
-  >
-    {/* ==================================================
-        Text
-    ================================================== */}
-
-    <div className="max-w-2xl">
-      {/* Brand Badge */}
-
-      <div
-        className="
-          inline-flex
-          items-center
-          gap-2
-          rounded-full
-          border
-          border-blue-200
-          bg-blue-100/70
-          px-3.5
-          py-1.5
-          text-xs
-          font-bold
-          tracking-wide
-          text-blue-700
-
-          dark:border-blue-800/60
-          dark:bg-blue-500/10
-          dark:text-blue-300
-        "
-      >
-        <span
+        <section
           className="
-            h-1.5
-            w-1.5
-            rounded-full
-            bg-blue-500
-            shadow-sm
-            shadow-blue-500/50
-          "
-        />
-
-        QuickHelp AI
-      </div>
-
-      {/* Heading */}
-
-      <h2
-        className="
-          mt-5
-          text-3xl
-          font-black
-          leading-tight
-          tracking-tight
-          text-slate-900
-
-          dark:text-white
-
-          sm:text-4xl
-          lg:text-5xl
-        "
-      >
-        Your AI workspace
-        <span
-          className="
-            block
-            bg-gradient-to-r
-            from-blue-600
-            via-blue-500
-            to-cyan-500
-            bg-clip-text
-            text-transparent
-
-            dark:from-blue-400
-            dark:via-cyan-400
-            dark:to-cyan-300
-          "
-        >
-          is ready.
-        </span>
-      </h2>
-
-      {/* Description */}
-
-      <p
-        className="
-          mt-4
-          max-w-xl
-          text-sm
-          leading-7
-          text-slate-600
-
-          dark:text-slate-300
-
-          sm:text-base
-        "
-      >
-        Manage your knowledge base, upload business
-        documents, and get intelligent answers from
-        your AI assistant.
-      </p>
-
-      {/* Small Status */}
-
-      <div
-        className="
-          mt-5
-          flex
-          flex-wrap
-          items-center
-          gap-3
-        "
-      >
-        <span
-          className="
-            inline-flex
-            items-center
-            gap-2
-            rounded-full
+            relative
+            overflow-hidden
+            rounded-[32px]
             border
-            border-emerald-200
-            bg-emerald-50
-            px-3
-            py-1.5
-            text-xs
-            font-semibold
-            text-emerald-700
+            border-blue-100
+            bg-gradient-to-br
+            from-white
+            via-blue-50
+            to-cyan-50
+            p-7
+            shadow-lg
+            shadow-blue-100/50
+            transition-all
+            duration-300
 
-            dark:border-emerald-800/50
-            dark:bg-emerald-500/10
-            dark:text-emerald-400
+            dark:border-blue-900/40
+            dark:from-slate-900
+            dark:via-blue-950/60
+            dark:to-slate-900
+            dark:shadow-black/20
+
+            lg:p-10
           "
         >
-          <span
+          {/* Decorative Background */}
+
+          <div
             className="
-              h-1.5
-              w-1.5
+              pointer-events-none
+              absolute
+              -right-24
+              -top-24
+              h-72
+              w-72
               rounded-full
-              bg-emerald-500
+              bg-blue-400/10
+              blur-3xl
+
+              dark:bg-blue-500/10
             "
           />
 
-          AI Assistant Ready
-        </span>
+          <div
+            className="
+              pointer-events-none
+              absolute
+              -bottom-32
+              left-1/3
+              h-80
+              w-80
+              rounded-full
+              bg-cyan-400/10
+              blur-3xl
 
-        <span
-          className="
-            text-xs
-            font-medium
-            text-slate-400
+              dark:bg-cyan-400/10
+            "
+          />
 
-            dark:text-slate-500
-          "
-        >
-          Powered by your knowledge base
-        </span>
-      </div>
-    </div>
+          <div
+            className="
+              pointer-events-none
+              absolute
+              left-1/2
+              top-1/2
+              h-64
+              w-64
+              -translate-x-1/2
+              -translate-y-1/2
+              rounded-full
+              bg-blue-300/5
+              blur-3xl
 
-    {/* ==================================================
-        Quick Actions
-    ================================================== */}
+              dark:bg-blue-500/5
+            "
+          />
 
-    <div
-      className="
-        relative
-        flex
-        flex-col
-        gap-3
-        sm:flex-row
-        lg:flex-col
-        lg:min-w-[230px]
-      "
-    >
-      {/* Upload */}
+          {/* Hero Content */}
 
-      <Link
-        to="/dashboard/upload"
-        className="
-          inline-flex
-          items-center
-          justify-center
-          gap-2
-          rounded-xl
-          bg-gradient-to-r
-          from-blue-600
-          to-cyan-500
-          px-5
-          py-3.5
-          text-sm
-          font-bold
-          text-white
-          shadow-lg
-          shadow-blue-500/20
-          transition-all
-          duration-200
+          <div
+            className="
+              relative
+              flex
+              flex-col
+              gap-8
+              lg:flex-row
+              lg:items-center
+              lg:justify-between
+            "
+          >
+            {/* Text */}
 
-          hover:-translate-y-0.5
-          hover:shadow-xl
-          hover:shadow-blue-500/25
+            <div className="max-w-2xl">
+              {/* Brand Badge */}
 
-          dark:from-blue-500
-          dark:to-cyan-500
-        "
-      >
-        <Upload size={17} />
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  rounded-full
+                  border
+                  border-blue-200
+                  bg-blue-100/70
+                  px-3.5
+                  py-1.5
+                  text-xs
+                  font-bold
+                  tracking-wide
+                  text-blue-700
 
-        Upload Document
-      </Link>
+                  dark:border-blue-800/60
+                  dark:bg-blue-500/10
+                  dark:text-blue-300
+                "
+              >
+                <span
+                  className="
+                    h-1.5
+                    w-1.5
+                    rounded-full
+                    bg-blue-500
+                    shadow-sm
+                    shadow-blue-500/50
+                  "
+                />
 
-      {/* Assistant */}
+                QuickHelp AI
+              </div>
 
-      <Link
-        to="/assistant"
-        className="
-          inline-flex
-          items-center
-          justify-center
-          gap-2
-          rounded-xl
-          border
-          border-slate-200
-          bg-white/80
-          px-5
-          py-3.5
-          text-sm
-          font-bold
-          text-slate-700
-          shadow-sm
-          backdrop-blur
-          transition-all
-          duration-200
+              {/* Heading */}
 
-          hover:-translate-y-0.5
-          hover:border-blue-200
-          hover:bg-blue-50
-          hover:text-blue-700
-          hover:shadow-md
+              <h2
+                className="
+                  mt-5
+                  text-3xl
+                  font-black
+                  leading-tight
+                  tracking-tight
+                  text-slate-900
 
-          dark:border-slate-700
-          dark:bg-slate-800/80
-          dark:text-slate-200
-          dark:hover:border-blue-700
-          dark:hover:bg-slate-800
-          dark:hover:text-blue-400
-        "
-      >
-        <Bot size={17} />
+                  dark:text-white
 
-        Open AI Assistant
+                  sm:text-4xl
+                  lg:text-5xl
+                "
+              >
+                Your AI workspace
 
-        <ArrowRight
-          size={15}
-          className="transition-transform duration-200 group-hover:translate-x-0.5"
-        />
-      </Link>
-    </div>
-  </div>
-</section>
+                <span
+                  className="
+                    block
+                    bg-gradient-to-r
+                    from-blue-600
+                    via-blue-500
+                    to-cyan-500
+                    bg-clip-text
+                    text-transparent
+
+                    dark:from-blue-400
+                    dark:via-cyan-400
+                    dark:to-cyan-300
+                  "
+                >
+                  is ready.
+                </span>
+              </h2>
+
+              {/* Description */}
+
+              <p
+                className="
+                  mt-4
+                  max-w-xl
+                  text-sm
+                  leading-7
+                  text-slate-600
+
+                  dark:text-slate-300
+
+                  sm:text-base
+                "
+              >
+                Manage your knowledge base, upload business
+                documents, and get intelligent answers from
+                your AI assistant.
+              </p>
+
+              {/* Small Status */}
+
+              <div
+                className="
+                  mt-5
+                  flex
+                  flex-wrap
+                  items-center
+                  gap-3
+                "
+              >
+                <span
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-full
+                    border
+                    border-emerald-200
+                    bg-emerald-50
+                    px-3
+                    py-1.5
+                    text-xs
+                    font-semibold
+                    text-emerald-700
+
+                    dark:border-emerald-800/50
+                    dark:bg-emerald-500/10
+                    dark:text-emerald-400
+                  "
+                >
+                  <span
+                    className="
+                      h-1.5
+                      w-1.5
+                      rounded-full
+                      bg-emerald-500
+                    "
+                  />
+
+                  AI Assistant Ready
+                </span>
+
+                <span
+                  className="
+                    text-xs
+                    font-medium
+                    text-slate-400
+
+                    dark:text-slate-500
+                  "
+                >
+                  Powered by your knowledge base
+                </span>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+
+            <div
+              className="
+                relative
+                flex
+                flex-col
+                gap-3
+                sm:flex-row
+                lg:flex-col
+                lg:min-w-[230px]
+              "
+            >
+              {/* Upload */}
+
+              <Link
+                to="/dashboard/upload"
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-xl
+                  bg-gradient-to-r
+                  from-blue-600
+                  to-cyan-500
+                  px-5
+                  py-3.5
+                  text-sm
+                  font-bold
+                  text-white
+                  shadow-lg
+                  shadow-blue-500/20
+                  transition-all
+                  duration-200
+
+                  hover:-translate-y-0.5
+                  hover:shadow-xl
+                  hover:shadow-blue-500/25
+
+                  dark:from-blue-500
+                  dark:to-cyan-500
+                "
+              >
+                <Upload size={17} />
+
+                Upload Document
+              </Link>
+
+              {/* Assistant */}
+
+              <Link
+                to="/assistant"
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-xl
+                  border
+                  border-slate-200
+                  bg-white/80
+                  px-5
+                  py-3.5
+                  text-sm
+                  font-bold
+                  text-slate-700
+                  shadow-sm
+                  backdrop-blur
+                  transition-all
+                  duration-200
+
+                  hover:-translate-y-0.5
+                  hover:border-blue-200
+                  hover:bg-blue-50
+                  hover:text-blue-700
+                  hover:shadow-md
+
+                  dark:border-slate-700
+                  dark:bg-slate-800/80
+                  dark:text-slate-200
+                  dark:hover:border-blue-700
+                  dark:hover:bg-slate-800
+                  dark:hover:text-blue-400
+                "
+              >
+                <Bot size={17} />
+
+                Open AI Assistant
+
+                <ArrowRight
+                  size={15}
+                  className="
+                    transition-transform
+                    duration-200
+                  "
+                />
+              </Link>
+            </div>
+          </div>
+        </section>
 
         {/* ==================================================
             Dashboard Statistics
@@ -477,9 +458,7 @@ function Dashboard() {
             dark:shadow-black/20
           "
         >
-          {/* ==================================================
-              Recent Documents Header
-          ================================================== */}
+          {/* Recent Documents Header */}
 
           <div
             className="
@@ -602,6 +581,7 @@ function Dashboard() {
                   shadow-sm
                   transition-all
                   duration-200
+
                   hover:-translate-y-0.5
                   hover:border-blue-300
                   hover:bg-blue-50
@@ -620,9 +600,7 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* ==================================================
-              Loading
-          ================================================== */}
+          {/* Loading */}
 
           {loading ? (
             <div className="px-6 py-14">
@@ -657,9 +635,7 @@ function Dashboard() {
               </div>
             </div>
           ) : recentDocuments.length === 0 ? (
-            /* ==================================================
-                Empty State
-            ================================================== */
+            /* Empty State */
 
             <div className="p-5 sm:p-7">
               <div
@@ -776,6 +752,7 @@ function Dashboard() {
                       shadow-blue-600/20
                       transition-all
                       duration-200
+
                       hover:-translate-y-0.5
                       hover:shadow-xl
                       hover:shadow-blue-600/25
@@ -791,9 +768,7 @@ function Dashboard() {
               </div>
             </div>
           ) : (
-            /* ==================================================
-                Documents List
-            ================================================== */
+            /* Documents List */
 
             <div
               className="
@@ -1111,6 +1086,7 @@ function Dashboard() {
                 shadow-lg
                 transition-all
                 duration-200
+
                 hover:-translate-y-0.5
                 hover:bg-slate-800
 
