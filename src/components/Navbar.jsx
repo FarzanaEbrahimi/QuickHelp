@@ -8,10 +8,7 @@ import {
   Sun,
 } from "lucide-react";
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 import Logo from "./Logo";
 
@@ -112,7 +109,7 @@ function Navbar({ onMenuClick }) {
   }, []);
 
   // =========================================================
-  // Close Profile / Mobile Menu When Route Changes
+  // Close Menus When Route Changes
   // =========================================================
 
   useEffect(() => {
@@ -180,15 +177,11 @@ function Navbar({ onMenuClick }) {
           top-0
           z-40
           w-full
-
           border-b
           border-slate-200/80
-
           bg-white/90
           backdrop-blur-xl
-
           shadow-[0_1px_0_rgba(15,23,42,0.03)]
-
           transition-all
           duration-300
 
@@ -219,7 +212,6 @@ function Navbar({ onMenuClick }) {
               rounded-full
               bg-blue-500/5
               blur-3xl
-
               dark:bg-blue-500/10
             "
           />
@@ -234,7 +226,6 @@ function Navbar({ onMenuClick }) {
               rounded-full
               bg-cyan-400/5
               blur-3xl
-
               dark:bg-cyan-400/5
             "
           />
@@ -249,13 +240,16 @@ function Navbar({ onMenuClick }) {
             relative
             mx-auto
             flex
-            h-20
+            h-16
+            w-full
             max-w-7xl
             items-center
             justify-between
-            px-4
+            px-3
 
+            sm:h-20
             sm:px-6
+
             lg:px-8
           "
         >
@@ -263,8 +257,14 @@ function Navbar({ onMenuClick }) {
           {/* Left Side */}
           {/* ================================================= */}
 
-          <div className="flex min-w-0 items-center">
-
+          <div
+            className="
+              flex
+              min-w-0
+              flex-1
+              items-center
+            "
+          >
             {/* ================================================= */}
             {/* Dashboard / Assistant Mobile Menu */}
             {/* ================================================= */}
@@ -302,6 +302,7 @@ function Navbar({ onMenuClick }) {
                   xl:hidden
                 "
                 aria-label="Open sidebar"
+                aria-controls="dashboard-sidebar"
               >
                 <Menu className="h-5 w-5" />
               </button>
@@ -329,7 +330,6 @@ function Navbar({ onMenuClick }) {
 
                   border
                   border-slate-200/80
-
                   bg-slate-50/80
 
                   text-slate-600
@@ -363,6 +363,7 @@ function Navbar({ onMenuClick }) {
                     : "Open navigation menu"
                 }
                 aria-expanded={showMobileMenu}
+                aria-controls="landing-mobile-menu"
               >
                 {showMobileMenu ? (
                   <X className="h-5 w-5" />
@@ -376,7 +377,9 @@ function Navbar({ onMenuClick }) {
             {/* Logo */}
             {/* ================================================= */}
 
-            <Logo />
+            <div className="min-w-0 shrink">
+              <Logo />
+            </div>
 
             {/* ================================================= */}
             {/* Landing Navigation - Desktop */}
@@ -385,25 +388,25 @@ function Navbar({ onMenuClick }) {
             {!isDashboard && (
               <div
                 className="
-                  ml-8
+                  ml-6
                   hidden
                   items-center
-                  gap-2
+                  gap-1
 
                   lg:flex
 
-                  xl:ml-12
-                  xl:gap-3
+                  xl:ml-10
+                  xl:gap-2
                 "
               >
                 <a
                   href="#features"
                   className="
                     rounded-xl
-                    px-4
+                    px-3
                     py-2.5
 
-                    text-[15px]
+                    text-sm
                     font-semibold
 
                     text-slate-600
@@ -421,6 +424,8 @@ function Navbar({ onMenuClick }) {
                     focus-visible:outline-none
                     focus-visible:ring-2
                     focus-visible:ring-blue-500
+
+                    xl:px-4
                   "
                 >
                   Features
@@ -430,10 +435,10 @@ function Navbar({ onMenuClick }) {
                   href="#how-it-works"
                   className="
                     rounded-xl
-                    px-4
+                    px-3
                     py-2.5
 
-                    text-[15px]
+                    text-sm
                     font-semibold
 
                     text-slate-600
@@ -451,6 +456,8 @@ function Navbar({ onMenuClick }) {
                     focus-visible:outline-none
                     focus-visible:ring-2
                     focus-visible:ring-blue-500
+
+                    xl:px-4
                   "
                 >
                   How It Works
@@ -460,10 +467,10 @@ function Navbar({ onMenuClick }) {
                   href="#about"
                   className="
                     rounded-xl
-                    px-4
+                    px-3
                     py-2.5
 
-                    text-[15px]
+                    text-sm
                     font-semibold
 
                     text-slate-600
@@ -481,6 +488,8 @@ function Navbar({ onMenuClick }) {
                     focus-visible:outline-none
                     focus-visible:ring-2
                     focus-visible:ring-blue-500
+
+                    xl:px-4
                   "
                 >
                   About
@@ -496,13 +505,14 @@ function Navbar({ onMenuClick }) {
               <Link
                 to="/"
                 className="
-                  ml-3
+                  ml-2
                   hidden
+                  shrink-0
                   rounded-xl
-                  px-4
+                  px-3
                   py-2.5
 
-                  text-[15px]
+                  text-sm
                   font-semibold
 
                   text-slate-500
@@ -522,6 +532,9 @@ function Navbar({ onMenuClick }) {
                   focus-visible:ring-blue-500
 
                   md:block
+
+                  lg:ml-3
+                  lg:px-4
                 "
               >
                 ← Home
@@ -538,7 +551,7 @@ function Navbar({ onMenuClick }) {
               flex
               shrink-0
               items-center
-              gap-2
+              gap-1.5
 
               sm:gap-3
             "
@@ -553,15 +566,15 @@ function Navbar({ onMenuClick }) {
               className="
                 group
                 flex
-                h-11
-                w-11
+                h-10
+                w-10
+                shrink-0
                 items-center
                 justify-center
                 rounded-xl
 
                 border
                 border-slate-200/70
-
                 bg-slate-50/80
 
                 text-slate-600
@@ -588,6 +601,9 @@ function Navbar({ onMenuClick }) {
                 focus-visible:outline-none
                 focus-visible:ring-2
                 focus-visible:ring-blue-500
+
+                sm:h-11
+                sm:w-11
               "
               aria-label={
                 darkMode
@@ -605,10 +621,8 @@ function Navbar({ onMenuClick }) {
                   className="
                     h-5
                     w-5
-
                     transition-transform
                     duration-300
-
                     group-hover:rotate-12
                   "
                 />
@@ -617,10 +631,8 @@ function Navbar({ onMenuClick }) {
                   className="
                     h-5
                     w-5
-
                     transition-transform
                     duration-300
-
                     group-hover:-rotate-12
                   "
                 />
@@ -637,14 +649,15 @@ function Navbar({ onMenuClick }) {
                 onClick={handleDashboardClick}
                 className="
                   hidden
+                  shrink-0
                   rounded-xl
 
                   bg-blue-600
 
-                  px-5
+                  px-4
                   py-2.5
 
-                  text-[15px]
+                  text-sm
                   font-semibold
                   text-white
 
@@ -664,6 +677,8 @@ function Navbar({ onMenuClick }) {
                   focus-visible:ring-offset-2
 
                   sm:inline-flex
+
+                  lg:px-5
                 "
               >
                 Dashboard
@@ -683,17 +698,17 @@ function Navbar({ onMenuClick }) {
                   }}
                   className="
                     flex
+                    shrink-0
                     items-center
-                    gap-2.5
+                    gap-2
                     rounded-xl
 
                     border
                     border-slate-200
-
                     bg-white
 
-                    px-2
-                    py-2
+                    px-1.5
+                    py-1.5
 
                     shadow-sm
 
@@ -714,9 +729,12 @@ function Navbar({ onMenuClick }) {
                     focus-visible:ring-blue-500
 
                     sm:gap-3
+                    sm:px-2
+                    sm:py-2
                   "
                   aria-label="Open user profile"
                   aria-expanded={showProfile}
+                  aria-haspopup="menu"
                 >
                   {/* Avatar */}
 
@@ -796,6 +814,7 @@ function Navbar({ onMenuClick }) {
                       hidden
                       h-4
                       w-4
+                      shrink-0
                       text-slate-400
                       transition-transform
                       duration-200
@@ -820,9 +839,11 @@ function Navbar({ onMenuClick }) {
                     className="
                       absolute
                       right-0
-                      top-14
+                      top-[calc(100%+0.5rem)]
                       z-50
-                      w-72
+
+                      w-[min(18rem,calc(100vw-1.5rem))]
+
                       overflow-hidden
                       rounded-2xl
 
@@ -837,6 +858,7 @@ function Navbar({ onMenuClick }) {
                       dark:bg-slate-900
                       dark:shadow-black/40
                     "
+                    role="menu"
                   >
                     {/* Profile Header */}
 
@@ -998,7 +1020,6 @@ function Navbar({ onMenuClick }) {
               z-40
 
               bg-slate-950/30
-
               backdrop-blur-[2px]
 
               dark:bg-black/50
@@ -1016,14 +1037,15 @@ function Navbar({ onMenuClick }) {
           {/* ================================================= */}
 
           <aside
+            id="landing-mobile-menu"
             className="
               fixed
               left-0
-              top-20
+              top-16
               z-50
 
               flex
-              h-[calc(100vh-5rem)]
+              h-[calc(100vh-4rem)]
               w-72
               max-w-[85vw]
               flex-col
@@ -1052,6 +1074,9 @@ function Navbar({ onMenuClick }) {
               dark:to-[#0b172a]
 
               dark:shadow-black/40
+
+              sm:top-20
+              sm:h-[calc(100vh-5rem)]
 
               lg:hidden
             "

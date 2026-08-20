@@ -62,16 +62,26 @@ function Features() {
       id="features"
       className="
         bg-white
-        py-20
+        py-16
         transition-colors
         duration-300
-        sm:py-24
-        lg:py-28
+
+        sm:py-20
+        lg:py-24
+        xl:py-28
+
         dark:bg-slate-950
       "
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-
+      <div
+        className="
+          mx-auto
+          max-w-7xl
+          px-5
+          sm:px-6
+          lg:px-8
+        "
+      >
         {/* Header */}
 
         <div className="mx-auto max-w-3xl text-center">
@@ -82,13 +92,16 @@ function Features() {
               items-center
               rounded-full
               bg-blue-100
-              px-5
+              px-4
               py-2
               text-xs
               font-semibold
               tracking-wide
               text-blue-700
+
+              sm:px-5
               sm:text-sm
+
               dark:bg-blue-950/60
               dark:text-blue-300
             "
@@ -103,8 +116,10 @@ function Features() {
               font-extrabold
               tracking-tight
               text-slate-900
+
               sm:text-4xl
               lg:text-5xl
+
               dark:text-white
             "
           >
@@ -119,27 +134,32 @@ function Features() {
               text-base
               leading-7
               text-slate-600
+
               sm:text-lg
               sm:leading-8
+
               dark:text-slate-300
             "
           >
             Powerful tools designed to automate customer support and
             deliver accurate AI responses.
           </p>
-
         </div>
 
         {/* Feature Cards */}
 
         <div
           className="
-            mt-14
+            mt-12
             grid
-            gap-6
-            sm:mt-16
+            gap-5
+
+            sm:mt-14
             sm:grid-cols-2
-            lg:mt-20
+            sm:gap-6
+
+            lg:mt-18
+
             xl:grid-cols-4
           "
         >
@@ -154,10 +174,13 @@ function Features() {
                   rounded-3xl
                   border
                   border-slate-200
-                  p-7
+                  p-6
                   shadow-sm
                   transition-all
                   duration-300
+
+                  sm:p-7
+
                   ${feature.background}
                   ${feature.darkBackground}
                   ${feature.border}
@@ -168,14 +191,13 @@ function Features() {
                   dark:border-slate-800
                 `}
               >
-
                 {/* Icon */}
 
                 <div
                   className={`
                     flex
-                    h-14
-                    w-14
+                    h-13
+                    w-13
                     items-center
                     justify-center
                     rounded-2xl
@@ -184,21 +206,28 @@ function Features() {
                     shadow-lg
                     transition-transform
                     duration-300
+
+                    sm:h-14
+                    sm:w-14
+
                     group-hover:scale-105
                   `}
                 >
-                  <Icon className="h-7 w-7 text-white" />
+                  <Icon className="h-6 w-6 text-white sm:h-7 sm:w-7" />
                 </div>
 
                 {/* Title */}
 
                 <h3
                   className="
-                    mt-7
+                    mt-6
                     text-xl
                     font-bold
                     text-slate-900
+
+                    sm:mt-7
                     sm:text-2xl
+
                     dark:text-white
                   "
                 >
@@ -213,18 +242,18 @@ function Features() {
                     text-sm
                     leading-7
                     text-slate-600
+
                     sm:text-base
+
                     dark:text-slate-300
                   "
                 >
                   {feature.text}
                 </p>
-
               </div>
             );
           })}
         </div>
-
       </div>
     </section>
   );

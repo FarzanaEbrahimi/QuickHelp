@@ -11,36 +11,30 @@ const values = [
     title: "Built For Modern Teams",
     text: "QuickHelp helps businesses create smarter support experiences without complex setups.",
     gradient: "from-blue-500 to-cyan-500",
-    background:
-      "from-blue-50 via-white to-cyan-50",
+    background: "from-blue-50 via-white to-cyan-50",
     darkBackground:
       "dark:from-blue-950/50 dark:via-slate-900 dark:to-cyan-950/30",
-    border:
-      "hover:border-blue-200 dark:hover:border-blue-900",
+    border: "hover:border-blue-200 dark:hover:border-blue-900",
   },
   {
     icon: BrainCircuit,
     title: "Knowledge Driven AI",
     text: "Turn existing business knowledge into an intelligent assistant that understands your data.",
     gradient: "from-violet-500 to-purple-500",
-    background:
-      "from-violet-50 via-white to-purple-50",
+    background: "from-violet-50 via-white to-purple-50",
     darkBackground:
       "dark:from-violet-950/50 dark:via-slate-900 dark:to-purple-950/30",
-    border:
-      "hover:border-violet-200 dark:hover:border-violet-900",
+    border: "hover:border-violet-200 dark:hover:border-violet-900",
   },
   {
     icon: Zap,
     title: "Faster Customer Experience",
     text: "Help customers get accurate answers faster while reducing repetitive support work.",
     gradient: "from-emerald-500 to-green-500",
-    background:
-      "from-emerald-50 via-white to-green-50",
+    background: "from-emerald-50 via-white to-green-50",
     darkBackground:
       "dark:from-emerald-950/50 dark:via-slate-900 dark:to-green-950/30",
-    border:
-      "hover:border-emerald-200 dark:hover:border-emerald-900",
+    border: "hover:border-emerald-200 dark:hover:border-emerald-900",
   },
 ];
 
@@ -49,6 +43,8 @@ function About() {
     <section
       id="about"
       className="
+        relative
+        overflow-hidden
         bg-white
         py-20
         transition-colors
@@ -58,9 +54,43 @@ function About() {
         dark:bg-slate-950
       "
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+      {/* Background Glow */}
 
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="
+            absolute
+            -left-32
+            top-24
+            h-72
+            w-72
+            rounded-full
+            bg-blue-500/5
+            blur-3xl
+            dark:bg-blue-500/10
+          "
+        />
+
+        <div
+          className="
+            absolute
+            -right-32
+            bottom-20
+            h-72
+            w-72
+            rounded-full
+            bg-violet-500/5
+            blur-3xl
+            dark:bg-violet-500/10
+          "
+        />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+
+        {/* ====================================================== */}
         {/* Header */}
+        {/* ====================================================== */}
 
         <div className="mx-auto max-w-3xl text-center">
 
@@ -121,10 +151,11 @@ function About() {
             existing knowledge into a smarter support experience powered
             by artificial intelligence.
           </p>
-
         </div>
 
+        {/* ====================================================== */}
         {/* Main Content */}
+        {/* ====================================================== */}
 
         <div
           className="
@@ -139,7 +170,9 @@ function About() {
           "
         >
 
+          {/* ==================================================== */}
           {/* Why QuickHelp */}
+          {/* ==================================================== */}
 
           <div
             className="
@@ -154,6 +187,7 @@ function About() {
               shadow-sm
               transition-all
               duration-300
+
               hover:-translate-y-1
               hover:border-blue-200
               hover:shadow-xl
@@ -168,6 +202,8 @@ function About() {
               dark:hover:border-blue-900
             "
           >
+
+            {/* Icon */}
 
             <div
               className="
@@ -187,6 +223,8 @@ function About() {
               <Sparkles className="h-6 w-6" />
             </div>
 
+            {/* Title */}
+
             <h3
               className="
                 mt-6
@@ -199,6 +237,8 @@ function About() {
             >
               Why QuickHelp?
             </h3>
+
+            {/* Paragraph 1 */}
 
             <p
               className="
@@ -216,6 +256,8 @@ function About() {
               that process faster, smarter, and more efficient.
             </p>
 
+            {/* Paragraph 2 */}
+
             <p
               className="
                 mt-4
@@ -232,9 +274,27 @@ function About() {
               information organized and accessible.
             </p>
 
+            {/* Bottom Accent */}
+
+            <div
+              className="
+                mt-7
+                h-1
+                w-12
+                rounded-full
+                bg-gradient-to-r
+                from-blue-500
+                to-cyan-500
+                transition-all
+                duration-300
+                hover:w-20
+              "
+            />
           </div>
 
+          {/* ==================================================== */}
           {/* Values */}
+          {/* ==================================================== */}
 
           <div className="grid gap-5 sm:gap-6">
 
@@ -326,15 +386,11 @@ function About() {
                     </p>
 
                   </div>
-
                 </div>
               );
             })}
-
           </div>
-
         </div>
-
       </div>
     </section>
   );

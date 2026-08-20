@@ -28,7 +28,9 @@ function Hero() {
         dark:to-slate-950
       "
     >
+      {/* ========================================================= */}
       {/* Background Decorative Glow */}
+      {/* ========================================================= */}
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
@@ -41,8 +43,10 @@ function Hero() {
             rounded-full
             bg-blue-500/10
             blur-3xl
+
             sm:h-80
             sm:w-80
+
             dark:bg-blue-500/10
           "
         />
@@ -57,8 +61,10 @@ function Hero() {
             rounded-full
             bg-cyan-400/10
             blur-3xl
+
             sm:h-80
             sm:w-80
+
             dark:bg-cyan-500/10
           "
         />
@@ -73,35 +79,41 @@ function Hero() {
             rounded-full
             bg-violet-400/10
             blur-3xl
+
             dark:bg-violet-500/10
           "
         />
       </div>
+
+      {/* ========================================================= */}
+      {/* Main Container */}
+      {/* ========================================================= */}
 
       <div
         className="
           relative
           mx-auto
           grid
-          min-h-[calc(100vh-5rem)]
           max-w-7xl
           items-center
-          gap-14
+          gap-12
           px-5
-          py-16
+          py-14
 
+          sm:gap-14
           sm:px-6
           sm:py-20
 
+          lg:min-h-[calc(100vh-5rem)]
           lg:grid-cols-2
           lg:gap-16
           lg:px-8
           lg:py-24
         "
       >
-        {/* ========================================================= */}
+        {/* ======================================================= */}
         {/* Left Content */}
-        {/* ========================================================= */}
+        {/* ======================================================= */}
 
         <div className="text-center lg:text-left">
 
@@ -158,7 +170,14 @@ function Hero() {
           >
             Build Your AI
 
-            <span className="mt-1 block text-blue-600 dark:text-blue-400">
+            <span
+              className="
+                mt-1
+                block
+                text-blue-600
+                dark:text-blue-400
+              "
+            >
               Support Assistant
             </span>
           </h1>
@@ -188,7 +207,9 @@ function Hero() {
             powered by Retrieval-Augmented Generation (RAG).
           </p>
 
+          {/* ===================================================== */}
           {/* Key Benefits */}
+          {/* ===================================================== */}
 
           <div
             className="
@@ -241,7 +262,9 @@ function Hero() {
             ))}
           </div>
 
+          {/* ===================================================== */}
           {/* CTA Buttons */}
+          {/* ===================================================== */}
 
           <div
             className="
@@ -262,8 +285,10 @@ function Hero() {
               lg:justify-start
             "
           >
+            {/* AI Assistant */}
+
             <Link
-              to="/chat"
+              to="/assistant"
               className="
                 inline-flex
                 min-h-12
@@ -301,6 +326,8 @@ function Hero() {
 
               <ArrowRight className="h-5 w-5" />
             </Link>
+
+            {/* Dashboard */}
 
             <Link
               to="/dashboard"
@@ -350,14 +377,26 @@ function Hero() {
           </div>
         </div>
 
-        {/* ========================================================= */}
-        {/* Right Dashboard Preview */}
-        {/* ========================================================= */}
+        {/* ======================================================= */}
+        {/* Dashboard Preview */}
+        {/* ======================================================= */}
 
-        <div className="hidden justify-center lg:flex">
-          <div className="relative w-full max-w-lg">
+        <div
+          className="
+            flex
+            justify-center
 
-            {/* Glow behind card */}
+            lg:justify-end
+          "
+        >
+          <div
+            className="
+              relative
+              w-full
+              max-w-lg
+            "
+          >
+            {/* Glow */}
 
             <div
               className="
@@ -370,49 +409,66 @@ function Hero() {
                 via-violet-400/10
                 to-cyan-400/20
                 blur-3xl
+
                 dark:from-blue-500/10
                 dark:via-violet-500/10
                 dark:to-cyan-500/10
               "
             />
 
+            {/* ================================================= */}
             {/* Preview Card */}
+            {/* ================================================= */}
 
             <div
               className="
                 relative
                 overflow-hidden
-                rounded-[2rem]
+                rounded-[1.5rem]
                 border
                 border-slate-200
                 bg-white/95
-                p-6
+                p-4
                 shadow-2xl
                 backdrop-blur-sm
                 transition-all
                 duration-500
 
-                hover:-translate-y-2
+                hover:-translate-y-1
                 hover:shadow-blue-200/40
 
-                sm:p-7
+                sm:rounded-[2rem]
+                sm:p-6
 
                 dark:border-slate-700
                 dark:bg-slate-900/95
                 dark:hover:shadow-blue-950/50
               "
             >
+              {/* ================================================= */}
               {/* Top Bar */}
+              {/* ================================================= */}
 
-              <div className="flex items-center justify-between gap-4">
+              <div
+                className="
+                  flex
+                  items-center
+                  justify-between
+                  gap-3
+
+                  sm:gap-4
+                "
+              >
                 <div className="min-w-0">
                   <p
                     className="
-                      text-xs
+                      text-[10px]
                       font-semibold
                       uppercase
                       tracking-wider
                       text-slate-400
+
+                      sm:text-xs
                     "
                   >
                     QuickHelp
@@ -422,9 +478,12 @@ function Hero() {
                     className="
                       mt-1
                       truncate
-                      text-xl
+                      text-lg
                       font-bold
                       text-slate-900
+
+                      sm:text-xl
+
                       dark:text-white
                     "
                   >
@@ -440,25 +499,46 @@ function Hero() {
                     gap-1.5
                     rounded-full
                     bg-emerald-100
-                    px-3
-                    py-1.5
-                    text-xs
+                    px-2.5
+                    py-1
+                    text-[10px]
                     font-semibold
                     text-emerald-700
+
+                    sm:px-3
+                    sm:py-1.5
+                    sm:text-xs
 
                     dark:bg-emerald-950/60
                     dark:text-emerald-400
                   "
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  <span
+                    className="
+                      h-1.5
+                      w-1.5
+                      rounded-full
+                      bg-emerald-500
+                    "
+                  />
+
                   Online
                 </span>
               </div>
 
+              {/* ================================================= */}
               {/* Preview Items */}
+              {/* ================================================= */}
 
-              <div className="mt-7 space-y-4">
+              <div
+                className="
+                  mt-5
+                  space-y-3
 
+                  sm:mt-7
+                  sm:space-y-4
+                "
+              >
                 {/* Upload */}
 
                 <div
@@ -469,25 +549,44 @@ function Hero() {
                     bg-gradient-to-r
                     from-blue-50
                     to-cyan-50
-                    p-4
+                    p-3
+
                     transition-all
                     duration-300
+
                     hover:-translate-y-0.5
                     hover:shadow-md
+
+                    sm:p-4
 
                     dark:border-blue-900/40
                     dark:from-blue-950/50
                     dark:to-cyan-950/30
                   "
                 >
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex min-w-0 items-center gap-3">
+                  <div
+                    className="
+                      flex
+                      items-center
+                      justify-between
+                      gap-3
 
+                      sm:gap-4
+                    "
+                  >
+                    <div
+                      className="
+                        flex
+                        min-w-0
+                        items-center
+                        gap-3
+                      "
+                    >
                       <div
                         className="
                           flex
-                          h-10
-                          w-10
+                          h-9
+                          w-9
                           shrink-0
                           items-center
                           justify-center
@@ -497,17 +596,24 @@ function Hero() {
                           to-cyan-500
                           text-white
                           shadow-sm
+
+                          sm:h-10
+                          sm:w-10
                         "
                       >
-                        <Upload className="h-5 w-5" />
+                        <Upload className="h-4 w-4 sm:h-5 sm:w-5" />
                       </div>
 
                       <div className="min-w-0">
                         <p
                           className="
                             truncate
+                            text-sm
                             font-semibold
                             text-slate-800
+
+                            sm:text-base
+
                             dark:text-slate-200
                           "
                         >
@@ -517,8 +623,11 @@ function Hero() {
                         <p
                           className="
                             mt-0.5
-                            text-xs
+                            text-[11px]
                             text-slate-500
+
+                            sm:text-xs
+
                             dark:text-slate-400
                           "
                         >
@@ -529,14 +638,34 @@ function Hero() {
 
                     <span
                       className="
+                        hidden
                         shrink-0
-                        text-sm
+                        text-xs
                         font-semibold
                         text-blue-600
+
+                        sm:block
+                        sm:text-sm
+
                         dark:text-blue-400
                       "
                     >
                       Documents Ready
+                    </span>
+
+                    <span
+                      className="
+                        shrink-0
+                        text-[10px]
+                        font-semibold
+                        text-blue-600
+
+                        sm:hidden
+
+                        dark:text-blue-400
+                      "
+                    >
+                      Ready
                     </span>
                   </div>
                 </div>
@@ -551,25 +680,44 @@ function Hero() {
                     bg-gradient-to-r
                     from-violet-50
                     to-purple-50
-                    p-4
+                    p-3
+
                     transition-all
                     duration-300
+
                     hover:-translate-y-0.5
                     hover:shadow-md
+
+                    sm:p-4
 
                     dark:border-violet-900/40
                     dark:from-violet-950/50
                     dark:to-purple-950/30
                   "
                 >
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex min-w-0 items-center gap-3">
+                  <div
+                    className="
+                      flex
+                      items-center
+                      justify-between
+                      gap-3
 
+                      sm:gap-4
+                    "
+                  >
+                    <div
+                      className="
+                        flex
+                        min-w-0
+                        items-center
+                        gap-3
+                      "
+                    >
                       <div
                         className="
                           flex
-                          h-10
-                          w-10
+                          h-9
+                          w-9
                           shrink-0
                           items-center
                           justify-center
@@ -579,17 +727,24 @@ function Hero() {
                           to-purple-500
                           text-white
                           shadow-sm
+
+                          sm:h-10
+                          sm:w-10
                         "
                       >
-                        <BrainCircuit className="h-5 w-5" />
+                        <BrainCircuit className="h-4 w-4 sm:h-5 sm:w-5" />
                       </div>
 
                       <div className="min-w-0">
                         <p
                           className="
                             truncate
+                            text-sm
                             font-semibold
                             text-slate-800
+
+                            sm:text-base
+
                             dark:text-slate-200
                           "
                         >
@@ -599,8 +754,11 @@ function Hero() {
                         <p
                           className="
                             mt-0.5
-                            text-xs
+                            text-[11px]
                             text-slate-500
+
+                            sm:text-xs
+
                             dark:text-slate-400
                           "
                         >
@@ -612,9 +770,12 @@ function Hero() {
                     <span
                       className="
                         shrink-0
-                        text-sm
+                        text-[10px]
                         font-semibold
                         text-emerald-600
+
+                        sm:text-sm
+
                         dark:text-emerald-400
                       "
                     >
@@ -633,25 +794,44 @@ function Hero() {
                     bg-gradient-to-r
                     from-emerald-50
                     to-green-50
-                    p-4
+                    p-3
+
                     transition-all
                     duration-300
+
                     hover:-translate-y-0.5
                     hover:shadow-md
+
+                    sm:p-4
 
                     dark:border-emerald-900/40
                     dark:from-emerald-950/50
                     dark:to-green-950/30
                   "
                 >
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex min-w-0 items-center gap-3">
+                  <div
+                    className="
+                      flex
+                      items-center
+                      justify-between
+                      gap-3
 
+                      sm:gap-4
+                    "
+                  >
+                    <div
+                      className="
+                        flex
+                        min-w-0
+                        items-center
+                        gap-3
+                      "
+                    >
                       <div
                         className="
                           flex
-                          h-10
-                          w-10
+                          h-9
+                          w-9
                           shrink-0
                           items-center
                           justify-center
@@ -661,17 +841,24 @@ function Hero() {
                           to-green-500
                           text-white
                           shadow-sm
+
+                          sm:h-10
+                          sm:w-10
                         "
                       >
-                        <MessageSquareText className="h-5 w-5" />
+                        <MessageSquareText className="h-4 w-4 sm:h-5 sm:w-5" />
                       </div>
 
                       <div className="min-w-0">
                         <p
                           className="
                             truncate
+                            text-sm
                             font-semibold
                             text-slate-800
+
+                            sm:text-base
+
                             dark:text-slate-200
                           "
                         >
@@ -681,8 +868,11 @@ function Hero() {
                         <p
                           className="
                             mt-0.5
-                            text-xs
+                            text-[11px]
                             text-slate-500
+
+                            sm:text-xs
+
                             dark:text-slate-400
                           "
                         >
@@ -694,9 +884,12 @@ function Hero() {
                     <span
                       className="
                         shrink-0
-                        text-sm
+                        text-[10px]
                         font-semibold
                         text-emerald-600
+
+                        sm:text-sm
+
                         dark:text-emerald-400
                       "
                     >
@@ -715,25 +908,44 @@ function Hero() {
                     bg-gradient-to-r
                     from-orange-50
                     to-amber-50
-                    p-4
+                    p-3
+
                     transition-all
                     duration-300
+
                     hover:-translate-y-0.5
                     hover:shadow-md
+
+                    sm:p-4
 
                     dark:border-orange-900/40
                     dark:from-orange-950/50
                     dark:to-amber-950/30
                   "
                 >
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex min-w-0 items-center gap-3">
+                  <div
+                    className="
+                      flex
+                      items-center
+                      justify-between
+                      gap-3
 
+                      sm:gap-4
+                    "
+                  >
+                    <div
+                      className="
+                        flex
+                        min-w-0
+                        items-center
+                        gap-3
+                      "
+                    >
                       <div
                         className="
                           flex
-                          h-10
-                          w-10
+                          h-9
+                          w-9
                           shrink-0
                           items-center
                           justify-center
@@ -743,17 +955,24 @@ function Hero() {
                           to-amber-500
                           text-white
                           shadow-sm
+
+                          sm:h-10
+                          sm:w-10
                         "
                       >
-                        <BarChart3 className="h-5 w-5" />
+                        <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5" />
                       </div>
 
                       <div className="min-w-0">
                         <p
                           className="
                             truncate
+                            text-sm
                             font-semibold
                             text-slate-800
+
+                            sm:text-base
+
                             dark:text-slate-200
                           "
                         >
@@ -763,8 +982,11 @@ function Hero() {
                         <p
                           className="
                             mt-0.5
-                            text-xs
+                            text-[11px]
                             text-slate-500
+
+                            sm:text-xs
+
                             dark:text-slate-400
                           "
                         >
@@ -776,9 +998,12 @@ function Hero() {
                     <span
                       className="
                         shrink-0
-                        text-sm
+                        text-[10px]
                         font-semibold
                         text-orange-600
+
+                        sm:text-sm
+
                         dark:text-orange-400
                       "
                     >
@@ -788,21 +1013,27 @@ function Hero() {
                 </div>
               </div>
 
+              {/* ================================================= */}
               {/* Bottom Status */}
+              {/* ================================================= */}
 
               <div
                 className="
-                  mt-6
+                  mt-4
                   flex
                   items-center
                   justify-between
-                  gap-4
+                  gap-3
                   rounded-2xl
                   border
                   border-slate-200
                   bg-slate-50
-                  px-4
-                  py-3
+                  px-3
+                  py-2.5
+
+                  sm:mt-6
+                  sm:px-4
+                  sm:py-3
 
                   dark:border-slate-800
                   dark:bg-slate-950
@@ -810,9 +1041,12 @@ function Hero() {
               >
                 <span
                   className="
-                    text-xs
+                    text-[10px]
                     font-medium
                     text-slate-500
+
+                    sm:text-xs
+
                     dark:text-slate-400
                   "
                 >
@@ -821,9 +1055,12 @@ function Hero() {
 
                 <span
                   className="
-                    text-xs
+                    text-[10px]
                     font-semibold
                     text-emerald-600
+
+                    sm:text-xs
+
                     dark:text-emerald-400
                   "
                 >

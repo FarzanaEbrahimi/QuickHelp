@@ -11,7 +11,10 @@ import {
 
 import { supabase } from "../lib/supabase";
 
-function DocumentsTable({ documents, onDocumentDeleted }) {
+function DocumentsTable({
+  documents = [],
+  onDocumentDeleted,
+}) {
   const [deletingId, setDeletingId] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -19,11 +22,23 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
   // Delete Document
   // --------------------------------------------------
 
-  const handleDelete = async (documentId) => {
-    if (!documentId) return;
+  const handleDelete = async (document) => {
+    const documentId = document?.id;
+
+    if (!documentId) {
+      setErrorMessage(
+        "Document ID is missing. The document cannot be deleted."
+      );
+      return;
+    }
+
+    const documentName =
+      document.title ||
+      document.file_name ||
+      "this document";
 
     const confirmed = window.confirm(
-      "Are you sure you want to delete this document?"
+      `Are you sure you want to delete "${documentName}"?\n\nThis will permanently remove the document, its AI chunks, and the PDF file from storage.`
     );
 
     if (!confirmed) return;
@@ -31,29 +46,181 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
     setDeletingId(documentId);
     setErrorMessage("");
 
+    const storageFileName = document.file_name;
+
     try {
-      const { error } = await supabase
+      // ------------------------------------------------
+      // 1. Validate Storage file path
+      // ------------------------------------------------
+
+      if (!storageFileName) {
+        throw new Error(
+          "Storage file name is missing."
+        );
+      }
+
+      // ------------------------------------------------
+      // 2. Try deleting the document first
+      //
+      // If the database has ON DELETE CASCADE,
+      // its chunks will be removed automatically.
+      //
+      // If the foreign key prevents deletion,
+      // we delete the chunks manually below.
+      // ------------------------------------------------
+
+      let documentDeleted = false;
+
+      const {
+        error: firstDocumentDeleteError,
+      } = await supabase
         .from("support_documents")
         .delete()
         .eq("id", documentId);
 
-      if (error) {
-        console.error("Delete document error:", error);
-        setErrorMessage(
-          error.message || "Failed to delete the document."
+      if (!firstDocumentDeleteError) {
+        documentDeleted = true;
+      } else {
+        console.warn(
+          "Initial document deletion was blocked. Checking document chunks...",
+          firstDocumentDeleteError
         );
-        return;
       }
 
-      // Tell parent component that deletion was successful
+      // ------------------------------------------------
+      // 3. If document deletion was blocked,
+      //    delete its AI chunks first
+      // ------------------------------------------------
+
+      if (!documentDeleted) {
+        const {
+          error: chunksDeleteError,
+        } = await supabase
+          .from("document_chunks")
+          .delete()
+          .eq("document_id", documentId);
+
+        if (chunksDeleteError) {
+          console.error(
+            "Failed to delete document chunks:",
+            chunksDeleteError
+          );
+
+          throw new Error(
+            "Failed to delete the document's AI data."
+          );
+        }
+
+        // ----------------------------------------------
+        // Try deleting the document again
+        // ----------------------------------------------
+
+        const {
+          error: retryDocumentDeleteError,
+        } = await supabase
+          .from("support_documents")
+          .delete()
+          .eq("id", documentId);
+
+        if (retryDocumentDeleteError) {
+          console.error(
+            "Failed to delete document record:",
+            retryDocumentDeleteError
+          );
+
+          throw new Error(
+            "Failed to delete the document record."
+          );
+        }
+
+        documentDeleted = true;
+      }
+
+      // ------------------------------------------------
+      // 4. Verify that no orphan chunks remain
+      // ------------------------------------------------
+
+      const {
+        data: remainingChunks,
+        error: verifyChunksError,
+      } = await supabase
+        .from("document_chunks")
+        .select("id")
+        .eq("document_id", documentId)
+        .limit(1);
+
+      if (verifyChunksError) {
+        console.error(
+          "Failed to verify document chunks:",
+          verifyChunksError
+        );
+
+        throw new Error(
+          "Document was deleted, but the AI data could not be verified."
+        );
+      }
+
+      if (
+        Array.isArray(remainingChunks) &&
+        remainingChunks.length > 0
+      ) {
+        throw new Error(
+          "The document was deleted, but some AI chunks still remain."
+        );
+      }
+
+      // ------------------------------------------------
+      // 5. Delete PDF from Supabase Storage
+      // ------------------------------------------------
+
+      const {
+        error: storageDeleteError,
+      } = await supabase.storage
+        .from("support-docs")
+        .remove([storageFileName]);
+
+      if (storageDeleteError) {
+        console.error(
+          "Failed to delete storage file:",
+          storageDeleteError
+        );
+
+        throw new Error(
+          "Document data was deleted, but the PDF file could not be removed from Storage."
+        );
+      }
+
+      // ------------------------------------------------
+      // 6. Notify parent component
+      // ------------------------------------------------
+
       if (onDocumentDeleted) {
         onDocumentDeleted(documentId);
       }
+
+      // ------------------------------------------------
+      // 7. Notify other dashboard pages
+      // ------------------------------------------------
+
+      window.dispatchEvent(
+        new Event(
+          "quickhelp-documents-updated"
+        )
+      );
+
+      console.log(
+        "Document deleted successfully:",
+        documentId
+      );
     } catch (error) {
-      console.error("Unexpected delete error:", error);
+      console.error(
+        "Document deletion failed:",
+        error
+      );
 
       setErrorMessage(
-        "Something went wrong while deleting the document."
+        error?.message ||
+          "Something went wrong while deleting the document."
       );
     } finally {
       setDeletingId(null);
@@ -195,8 +362,6 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
               dark:to-cyan-950/20
             "
           >
-            {/* Background decoration */}
-
             <div
               className="
                 pointer-events-none
@@ -228,8 +393,6 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
                 dark:bg-cyan-500/10
               "
             />
-
-            {/* Icon */}
 
             <div
               className="
@@ -283,14 +446,19 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
                 dark:text-slate-400
               "
             >
-              Upload your first document to start building
-              your QuickHelp knowledge base.
+              Upload your first PDF document to
+              start building your QuickHelp
+              knowledge base.
             </p>
           </div>
         </div>
       </section>
     );
   }
+
+  // --------------------------------------------------
+  // Documents Table
+  // --------------------------------------------------
 
   return (
     <section
@@ -309,9 +477,7 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
         dark:shadow-black/20
       "
     >
-      {/* ========================================= */}
       {/* Header */}
-      {/* ========================================= */}
 
       <div
         className="
@@ -408,14 +574,14 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
             "
           >
             {documents.length}{" "}
-            {documents.length === 1 ? "File" : "Files"}
+            {documents.length === 1
+              ? "File"
+              : "Files"}
           </div>
         </div>
       </div>
 
-      {/* ========================================= */}
-      {/* Error Message */}
-      {/* ========================================= */}
+      {/* Error */}
 
       {errorMessage && (
         <div className="px-6 pt-6 sm:px-8">
@@ -445,9 +611,7 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
         </div>
       )}
 
-      {/* ========================================= */}
       {/* Table */}
-      {/* ========================================= */}
 
       <div className="p-6 sm:p-8">
         <div
@@ -461,8 +625,6 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
           "
         >
           <table className="w-full min-w-[850px] text-left">
-            {/* Table Header */}
-
             <thead>
               <tr
                 className="
@@ -491,11 +653,10 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
               </tr>
             </thead>
 
-            {/* Table Body */}
-
             <tbody>
               {documents.map((doc) => {
-                const isDeleting = deletingId === doc.id;
+                const isDeleting =
+                  deletingId === doc.id;
 
                 return (
                   <tr
@@ -505,9 +666,7 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
                       border-slate-100
                       transition-all
                       duration-200
-
                       hover:bg-blue-50/40
-
                       last:border-b-0
 
                       dark:border-slate-800
@@ -548,10 +707,12 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
                               dark:text-white
                             "
                             title={
-                              doc.title || doc.file_name
+                              doc.title ||
+                              doc.file_name
                             }
                           >
-                            {doc.title || doc.file_name}
+                            {doc.title ||
+                              doc.file_name}
                           </p>
 
                           <p
@@ -563,7 +724,7 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
                               dark:text-slate-400
                             "
                           >
-                            AI Knowledge File
+                            PDF Knowledge File
                           </p>
                         </div>
                       </div>
@@ -647,7 +808,7 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
                         <button
                           type="button"
                           onClick={() =>
-                            handleDelete(doc.id)
+                            handleDelete(doc)
                           }
                           disabled={isDeleting}
                           className="
@@ -685,11 +846,13 @@ function DocumentsTable({ documents, onDocumentDeleted }) {
                           {isDeleting ? (
                             <>
                               <Loader2 className="h-4 w-4 animate-spin" />
+
                               Deleting...
                             </>
                           ) : (
                             <>
                               <Trash2 className="h-4 w-4" />
+
                               Delete
                             </>
                           )}

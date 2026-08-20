@@ -1,4 +1,3 @@
-
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -13,28 +12,38 @@ function Home() {
   return (
     <div
       className="
+        flex
         min-h-screen
+        w-full
+        min-w-0
+        flex-col
+        overflow-x-clip
+
         bg-white
         text-slate-900
+
         transition-colors
         duration-300
+
         dark:bg-slate-950
         dark:text-white
       "
     >
       <Navbar />
 
-      <Hero />
+      <main className="w-full min-w-0">
+        <Hero />
 
-      <Features />
+        <Features />
 
-      <Stats />
+        <Stats />
 
-      <HowItWorks />
+        <HowItWorks />
 
-      <About />
+        <About />
 
-      <Contact />
+        <Contact />
+      </main>
 
       <Footer />
     </div>

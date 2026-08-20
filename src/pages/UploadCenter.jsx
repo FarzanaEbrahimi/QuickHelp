@@ -10,7 +10,12 @@ import UploadCard from "../components/UploadCard";
 function UploadCenter() {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Upload state
   const [uploading, setUploading] = useState(false);
+  const [uploadStage, setUploadStage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const fileInputRef = useRef(null);
 
@@ -21,25 +26,39 @@ function UploadCenter() {
   const fetchDocuments = async () => {
     setLoading(true);
 
-    const { data, error } = await supabase
-      .from("support_documents")
-      .select("*")
-      .order("created_at", {
-        ascending: false,
-      });
+    try {
+      const { data, error } = await supabase
+        .from("support_documents")
+        .select("*")
+        .order("created_at", {
+          ascending: false,
+        });
 
-    if (error) {
-      console.error("Failed to fetch documents:", error);
-      setDocuments([]);
-    } else {
+      if (error) {
+        console.error(
+          "Failed to fetch documents:",
+          error
+        );
+
+        setDocuments([]);
+        return;
+      }
+
       setDocuments(data || []);
-    }
+    } catch (error) {
+      console.error(
+        "Unexpected fetch error:",
+        error
+      );
 
-    setLoading(false);
+      setDocuments([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // --------------------------------------------------
-  // Initial Fetch + Sync With Other Dashboard Pages
+  // Initial Fetch + Sync
   // --------------------------------------------------
 
   useEffect(() => {
@@ -73,34 +92,64 @@ function UploadCenter() {
   }, []);
 
   // --------------------------------------------------
-  // Upload File
+  // Upload PDF
   // --------------------------------------------------
 
   const handleUpload = async (event) => {
+    // Prevent multiple uploads at the same time.
+    if (uploading) {
+      return;
+    }
+
     const file = event.target.files?.[0];
 
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
-    setUploading(true);
+    // Clear previous status messages.
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    let filePath = null;
+    let documentId = null;
 
     try {
+      setUploading(true);
+
       // ----------------------------------------------
-      // Validate File
+      // Validate PDF
       // ----------------------------------------------
 
-      const allowedExtensions = [
-        ".pdf",
-        ".txt",
-        ".doc",
-        ".docx",
-      ];
+      const fileName = file.name || "";
 
       const fileExtension =
-        "." + file.name.split(".").pop().toLowerCase();
+        "." +
+        fileName
+          .split(".")
+          .pop()
+          .toLowerCase();
 
-      if (!allowedExtensions.includes(fileExtension)) {
+      const isPdf =
+        fileExtension === ".pdf" &&
+        (
+          !file.type ||
+          file.type === "application/pdf"
+        );
+
+      if (!isPdf) {
         throw new Error(
-          "Unsupported file type. Please upload PDF, DOC, DOCX or TXT."
+          "Unsupported file type. Please upload a PDF file only."
+        );
+      }
+
+      // ----------------------------------------------
+      // Validate File Size
+      // ----------------------------------------------
+
+      if (file.size === 0) {
+        throw new Error(
+          "The selected PDF file is empty."
         );
       }
 
@@ -108,21 +157,26 @@ function UploadCenter() {
       // Safe File Name
       // ----------------------------------------------
 
-      const safeFileName = file.name.replace(
+      const safeFileName = fileName.replace(
         /[^\w.-]/g,
         "_"
       );
 
-      const filePath = `${Date.now()}-${safeFileName}`;
+      filePath = `${Date.now()}-${safeFileName}`;
 
       // ----------------------------------------------
-      // Upload To Supabase Storage
+      // Stage 1 — Upload to Storage
       // ----------------------------------------------
 
-      const { error: uploadError } =
-        await supabase.storage
-          .from("support-docs")
-          .upload(filePath, file);
+      setUploadStage(
+        "Uploading PDF to secure storage..."
+      );
+
+      const {
+        error: uploadError,
+      } = await supabase.storage
+        .from("support-docs")
+        .upload(filePath, file);
 
       if (uploadError) {
         throw uploadError;
@@ -132,10 +186,11 @@ function UploadCenter() {
       // Get Public URL
       // ----------------------------------------------
 
-      const { data: publicUrlData } =
-        supabase.storage
-          .from("support-docs")
-          .getPublicUrl(filePath);
+      const {
+        data: publicUrlData,
+      } = supabase.storage
+        .from("support-docs")
+        .getPublicUrl(filePath);
 
       const publicUrl =
         publicUrlData?.publicUrl;
@@ -147,8 +202,12 @@ function UploadCenter() {
       }
 
       // ----------------------------------------------
-      // Save Document In Database
+      // Stage 2 — Save Document
       // ----------------------------------------------
+
+      setUploadStage(
+        "Saving document information..."
+      );
 
       const {
         data: documentData,
@@ -157,7 +216,7 @@ function UploadCenter() {
         .from("support_documents")
         .insert([
           {
-            title: file.name,
+            title: fileName,
             file_name: filePath,
             content: publicUrl,
           },
@@ -165,37 +224,64 @@ function UploadCenter() {
         .select()
         .single();
 
-      // ----------------------------------------------
-      // If Database Insert Fails
-      // Remove Uploaded Storage File
-      // ----------------------------------------------
-
       if (dbError) {
-        await supabase.storage
-          .from("support-docs")
-          .remove([filePath]);
-
         throw dbError;
       }
 
+      if (!documentData?.id) {
+        throw new Error(
+          "Document was saved but no document ID was returned."
+        );
+      }
+
+      documentId = documentData.id;
+
       // ----------------------------------------------
-      // Extract Text
+      // Stage 3 — Extract PDF Text
       // ----------------------------------------------
 
-      const text = await extractPdfText(file);
-
-      // ----------------------------------------------
-      // Create Embeddings
-      // ----------------------------------------------
-
-      await createEmbeddings(
-        documentData.id,
-        text
+      setUploadStage(
+        "Extracting text from PDF..."
       );
 
+      const text =
+        await extractPdfText(file);
+
+      if (!text?.trim()) {
+        throw new Error(
+          "The PDF does not contain readable text."
+        );
+      }
+
       // ----------------------------------------------
-      // Refresh Local Documents
+      // Stage 4 — Create Embeddings
       // ----------------------------------------------
+
+      setUploadStage(
+        "Creating AI embeddings..."
+      );
+
+      const embeddingResult =
+        await createEmbeddings(
+          documentId,
+          text
+        );
+
+      if (
+        !embeddingResult?.success
+      ) {
+        throw new Error(
+          "Failed to create document embeddings."
+        );
+      }
+
+      // ----------------------------------------------
+      // Stage 5 — Refresh Documents
+      // ----------------------------------------------
+
+      setUploadStage(
+        "Finalizing document..."
+      );
 
       await fetchDocuments();
 
@@ -204,12 +290,26 @@ function UploadCenter() {
       // ----------------------------------------------
 
       window.dispatchEvent(
-        new Event("quickhelp-documents-updated")
+        new Event(
+          "quickhelp-documents-updated"
+        )
+      );
+
+      // ----------------------------------------------
+      // Success
+      // ----------------------------------------------
+
+      setUploadStage("");
+      setSuccessMessage(
+        `"${fileName}" was uploaded and added to your AI knowledge base successfully.`
       );
 
       console.log(
         "Document uploaded successfully:",
-        documentData
+        {
+          document: documentData,
+          embeddings: embeddingResult,
+        }
       );
     } catch (error) {
       console.error(
@@ -217,14 +317,54 @@ function UploadCenter() {
         error
       );
 
-      alert(
+      // ----------------------------------------------
+      // Rollback Database Document
+      // ----------------------------------------------
+
+      if (documentId) {
+        const {
+          error: rollbackError,
+        } = await supabase
+          .from("support_documents")
+          .delete()
+          .eq("id", documentId);
+
+        if (rollbackError) {
+          console.error(
+            "Failed to rollback document:",
+            rollbackError
+          );
+        }
+      }
+
+      // ----------------------------------------------
+      // Rollback Storage File
+      // ----------------------------------------------
+
+      if (filePath) {
+        const {
+          error: storageRollbackError,
+        } = await supabase.storage
+          .from("support-docs")
+          .remove([filePath]);
+
+        if (storageRollbackError) {
+          console.error(
+            "Failed to rollback storage file:",
+            storageRollbackError
+          );
+        }
+      }
+
+      setUploadStage("");
+      setErrorMessage(
         error?.message ||
-          "Something went wrong while uploading the document."
+          "Something went wrong while processing the PDF."
       );
     } finally {
       setUploading(false);
 
-      // Allow selecting the same file again
+      // Allow selecting the same file again.
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -289,8 +429,8 @@ function UploadCenter() {
               dark:text-slate-400
             "
           >
-            Upload your business documents to build
-            your AI knowledge base.
+            Upload PDF documents to build your
+            AI knowledge base.
           </p>
         </section>
 
@@ -298,7 +438,13 @@ function UploadCenter() {
         {/* Upload Card */}
         {/* ========================================= */}
 
-        <section>
+        <section
+          className={
+            uploading
+              ? "pointer-events-none opacity-90"
+              : ""
+          }
+        >
           <UploadCard
             fileInputRef={fileInputRef}
             handleUpload={handleUpload}
@@ -325,6 +471,7 @@ function UploadCenter() {
               shadow-sm
               transition-all
               duration-300
+
               dark:border-blue-900/60
               dark:from-blue-950/50
               dark:via-slate-900
@@ -364,6 +511,7 @@ function UploadCenter() {
                   justify-center
                   rounded-xl
                   bg-blue-100
+
                   dark:bg-blue-500/10
                 "
               >
@@ -376,6 +524,7 @@ function UploadCenter() {
                     border-[3px]
                     border-blue-200
                     border-t-blue-600
+
                     dark:border-blue-900
                     dark:border-t-blue-400
                   "
@@ -390,7 +539,7 @@ function UploadCenter() {
                     dark:text-blue-300
                   "
                 >
-                  Processing document...
+                  Processing PDF...
                 </h3>
 
                 <p
@@ -402,8 +551,168 @@ function UploadCenter() {
                     dark:text-blue-400
                   "
                 >
-                  Uploading, extracting text and
-                  creating AI embeddings.
+                  {uploadStage ||
+                    "Processing your document..."}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ========================================= */}
+        {/* Success Message */}
+        {/* ========================================= */}
+
+        {successMessage && !uploading && (
+          <section
+            className="
+              rounded-3xl
+              border
+              border-emerald-200
+              bg-emerald-50
+              p-5
+              transition-all
+              duration-300
+
+              dark:border-emerald-900/50
+              dark:bg-emerald-950/30
+            "
+          >
+            <div
+              className="
+                flex
+                items-start
+                gap-4
+              "
+            >
+              <div
+                className="
+                  flex
+                  h-10
+                  w-10
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-emerald-100
+                  text-emerald-600
+
+                  dark:bg-emerald-500/10
+                  dark:text-emerald-400
+                "
+              >
+                <span className="text-lg">
+                  ✓
+                </span>
+              </div>
+
+              <div>
+                <h3
+                  className="
+                    font-bold
+                    text-emerald-900
+                    dark:text-emerald-300
+                  "
+                >
+                  Upload completed
+                </h3>
+
+                <p
+                  className="
+                    mt-1
+                    text-sm
+                    leading-6
+                    text-emerald-700
+                    dark:text-emerald-400
+                  "
+                >
+                  {successMessage}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ========================================= */}
+        {/* Error Message */}
+        {/* ========================================= */}
+
+        {errorMessage && !uploading && (
+          <section
+            className="
+              rounded-3xl
+              border
+              border-red-200
+              bg-red-50
+              p-5
+              transition-all
+              duration-300
+
+              dark:border-red-900/50
+              dark:bg-red-950/30
+            "
+          >
+            <div
+              className="
+                flex
+                items-start
+                gap-4
+              "
+            >
+              <div
+                className="
+                  flex
+                  h-10
+                  w-10
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-red-100
+                  text-red-600
+
+                  dark:bg-red-500/10
+                  dark:text-red-400
+                "
+              >
+                <span className="text-lg">
+                  !
+                </span>
+              </div>
+
+              <div>
+                <h3
+                  className="
+                    font-bold
+                    text-red-900
+                    dark:text-red-300
+                  "
+                >
+                  Upload failed
+                </h3>
+
+                <p
+                  className="
+                    mt-1
+                    text-sm
+                    leading-6
+                    text-red-700
+                    dark:text-red-400
+                  "
+                >
+                  {errorMessage}
+                </p>
+
+                <p
+                  className="
+                    mt-2
+                    text-xs
+                    text-red-600/80
+                    dark:text-red-400/70
+                  "
+                >
+                  Any incomplete document data has
+                  been rolled back.
                 </p>
               </div>
             </div>
@@ -425,6 +734,7 @@ function UploadCenter() {
             shadow-sm
             transition-all
             duration-300
+
             dark:border-slate-800
             dark:bg-slate-900
             dark:shadow-lg
@@ -451,6 +761,7 @@ function UploadCenter() {
                     rounded-xl
                     bg-blue-50
                     text-blue-600
+
                     dark:bg-blue-500/10
                     dark:text-blue-400
                   "
@@ -500,6 +811,7 @@ function UploadCenter() {
                   border-2
                   border-slate-200
                   border-t-blue-600
+
                   dark:border-slate-700
                   dark:border-t-blue-400
                 "

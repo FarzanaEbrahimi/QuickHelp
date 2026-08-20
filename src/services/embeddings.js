@@ -1,7 +1,10 @@
 import { supabase } from "../lib/supabase";
 
+/**
+ * Clean extracted document text before chunking.
+ */
 function cleanText(text) {
-  return text
+  return String(text || "")
     .replace(/\u0000/g, "")
     .replace(/\r\n/g, "\n")
     .replace(/\r/g, "\n")
@@ -10,6 +13,15 @@ function cleanText(text) {
     .trim();
 }
 
+/**
+ * Split text into overlapping chunks.
+ *
+ * chunkSize:
+ * Maximum number of characters per chunk.
+ *
+ * overlap:
+ * Number of characters shared between consecutive chunks.
+ */
 function splitText(
   text,
   chunkSize = 1200,
@@ -20,7 +32,6 @@ function splitText(
   let start = 0;
 
   while (start < text.length) {
-
     const end = Math.min(
       start + chunkSize,
       text.length
@@ -38,70 +49,140 @@ function splitText(
       break;
     }
 
-    start += (chunkSize - overlap);
+    start += chunkSize - overlap;
   }
 
   return chunks;
 }
 
+/**
+ * Create embeddings for all document chunks
+ * and save them into document_chunks.
+ *
+ * IMPORTANT:
+ * If any chunk fails, the entire operation fails.
+ * Any chunks already inserted during this operation
+ * are removed to prevent partial/incomplete data.
+ */
 export async function createEmbeddings(
   documentId,
   text
 ) {
+  // --------------------------------------------------
+  // Validate input
+  // --------------------------------------------------
+
+  if (!documentId) {
+    throw new Error(
+      "Document ID is required to create embeddings."
+    );
+  }
+
+  if (!text?.trim()) {
+    throw new Error(
+      "No text available for embedding."
+    );
+  }
+
+  // --------------------------------------------------
+  // Clean document text
+  // --------------------------------------------------
 
   const cleanedText = cleanText(text);
 
+  if (!cleanedText) {
+    throw new Error(
+      "The document contains no readable text."
+    );
+  }
+
+  // --------------------------------------------------
+  // Create chunks
+  // --------------------------------------------------
+
   const chunks = splitText(cleanedText);
 
+  if (chunks.length === 0) {
+    throw new Error(
+      "No text chunks were created from the document."
+    );
+  }
+
   console.log(
-    "Total chunks:",
-    chunks.length
+    `Total chunks created: ${chunks.length}`
   );
 
-  for (
-    let i = 0;
-    i < chunks.length;
-    i++
-  ) {
+  // Keep track of chunks inserted during this run.
+  const insertedChunkIds = [];
 
-    const chunk = chunks[i];
+  try {
+    // --------------------------------------------------
+    // Process chunks one by one
+    // --------------------------------------------------
 
-    try {
+    for (
+      let i = 0;
+      i < chunks.length;
+      i++
+    ) {
+      const chunk = chunks[i];
 
-      const { data, error } =
+      console.log(
+        `Processing chunk ${i + 1}/${chunks.length}`
+      );
+
+      // ------------------------------------------------
+      // Create embedding
+      // ------------------------------------------------
+
+      const {
+        data,
+        error,
+      } =
         await supabase.functions.invoke(
           "create-embedding",
           {
             body: {
-              text: chunk
-            }
+              text: chunk,
+            },
           }
         );
 
       if (error) {
-
         console.error(
-          "Embedding error:",
+          `Embedding error for chunk ${i + 1}:`,
           error
         );
 
-        continue;
+        throw new Error(
+          `Failed to create embedding for chunk ${
+            i + 1
+          }/${chunks.length}.`
+        );
       }
 
       const embedding =
         data?.embedding;
 
-      if (!embedding) {
-
-        console.error(
-          "No embedding returned for chunk:",
-          i
+      if (
+        !Array.isArray(embedding) ||
+        embedding.length === 0
+      ) {
+        throw new Error(
+          `No valid embedding returned for chunk ${
+            i + 1
+          }/${chunks.length}.`
         );
-
-        continue;
       }
 
-      const { error: insertError } =
+      // ------------------------------------------------
+      // Save chunk + embedding
+      // ------------------------------------------------
+
+      const {
+        data: insertedChunk,
+        error: insertError,
+      } =
         await supabase
           .from("document_chunks")
           .insert([
@@ -109,37 +190,90 @@ export async function createEmbeddings(
               document_id: documentId,
               chunk_index: i,
               content: chunk,
-              embedding
-            }
-          ]);
+              embedding,
+            },
+          ])
+          .select("id")
+          .single();
 
       if (insertError) {
-
         console.error(
-          "Database insert error:",
+          `Database insert error for chunk ${
+            i + 1
+          }:`,
           insertError
         );
 
-        continue;
+        throw new Error(
+          `Failed to save chunk ${
+            i + 1
+          }/${chunks.length}.`
+        );
+      }
+
+      // ------------------------------------------------
+      // Track inserted chunk
+      // ------------------------------------------------
+
+      if (insertedChunk?.id) {
+        insertedChunkIds.push(
+          insertedChunk.id
+        );
       }
 
       console.log(
-        `Chunk ${i} saved successfully`
+        `Chunk ${i + 1}/${chunks.length} saved successfully.`
       );
-
-    } catch (error) {
-
-      console.error(
-        "Chunk processing failed:",
-        error
-      );
-
     }
 
+    // --------------------------------------------------
+    // Everything succeeded
+    // --------------------------------------------------
+
+    console.log(
+      `Embeddings created successfully. ${chunks.length} chunks saved.`
+    );
+
+    return {
+      success: true,
+      chunkCount: chunks.length,
+    };
+  } catch (error) {
+    console.error(
+      "Embedding pipeline failed:",
+      error
+    );
+
+    // --------------------------------------------------
+    // Remove partial chunks
+    // --------------------------------------------------
+
+    if (insertedChunkIds.length > 0) {
+      const {
+        error: cleanupError,
+      } = await supabase
+        .from("document_chunks")
+        .delete()
+        .in(
+          "id",
+          insertedChunkIds
+        );
+
+      if (cleanupError) {
+        console.error(
+          "Failed to clean up partial chunks:",
+          cleanupError
+        );
+      } else {
+        console.log(
+          `Cleaned up ${insertedChunkIds.length} partial chunk(s).`
+        );
+      }
+    }
+
+    // Important:
+    // Re-throw so UploadCenter can detect
+    // that embedding generation failed.
+    throw error;
   }
-
-  console.log(
-    "Embeddings created successfully"
-  );
-
 }

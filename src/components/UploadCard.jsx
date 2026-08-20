@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 import {
@@ -77,7 +76,6 @@ function UploadCard({
         "
       >
         <div className="flex items-center gap-4">
-
           <div
             className="
               flex
@@ -96,7 +94,7 @@ function UploadCard({
 
           <div>
             <h2 className="text-2xl font-black">
-              Add a Document
+              Add a PDF Document
             </h2>
 
             <p
@@ -107,10 +105,10 @@ function UploadCard({
                 text-blue-100
               "
             >
-              Upload a file to give your AI assistant more information.
+              Upload a PDF file to give your AI
+              assistant more information.
             </p>
           </div>
-
         </div>
       </div>
 
@@ -127,7 +125,6 @@ function UploadCard({
           dark:bg-slate-900
         "
       >
-
         {/* Drop Zone */}
 
         <div
@@ -153,7 +150,6 @@ function UploadCard({
             }
           `}
         >
-
           {/* Upload Icon */}
 
           <div
@@ -193,7 +189,7 @@ function UploadCard({
               dark:text-white
             "
           >
-            Drop your file here
+            Drop your PDF here
           </h3>
 
           {/* Description */}
@@ -210,46 +206,40 @@ function UploadCard({
               dark:text-slate-400
             "
           >
-            Or choose a file from your computer.
+            Or choose a PDF file from your computer.
           </p>
 
-          {/* Supported File Types */}
+          {/* Supported File Type */}
 
           <div
             className="
               mt-5
               flex
-              flex-wrap
               justify-center
-              gap-2
             "
           >
-            {["PDF", "DOCX", "TXT"].map((type) => (
-              <span
-                key={type}
-                className="
-                  rounded-full
-                  border
-                  border-slate-200
-                  bg-white
-                  px-3
-                  py-1
-                  text-xs
-                  font-semibold
-                  text-slate-600
-                  transition-colors
-                  duration-300
+            <span
+              className="
+                rounded-full
+                border
+                border-slate-200
+                bg-white
+                px-4
+                py-1.5
+                text-xs
+                font-bold
+                text-slate-600
+                transition-colors
+                duration-300
 
-                  dark:border-slate-700
-                  dark:bg-slate-900
-                  dark:text-slate-300
-                "
-              >
-                {type}
-              </span>
-            ))}
+                dark:border-slate-700
+                dark:bg-slate-900
+                dark:text-slate-300
+              "
+            >
+              PDF only
+            </span>
           </div>
-
         </div>
 
         {/* Hidden File Input */}
@@ -257,7 +247,7 @@ function UploadCard({
         <input
           ref={fileInputRef}
           type="file"
-          accept=".pdf,.txt,.doc,.docx"
+          accept="application/pdf,.pdf"
           className="hidden"
           onChange={handleUpload}
         />
@@ -296,7 +286,7 @@ function UploadCard({
         >
           <ArrowUp className="h-4 w-4" />
 
-          Choose a File
+          Choose a PDF
         </button>
 
         {/* Processing Info */}
@@ -319,10 +309,10 @@ function UploadCard({
           <FileText className="h-4 w-4" />
 
           <span>
-            Your file will be processed automatically after upload.
+            PDF text will be extracted and processed
+            automatically after upload.
           </span>
         </div>
-
       </div>
     </section>
   );
